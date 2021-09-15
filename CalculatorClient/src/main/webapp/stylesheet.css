@@ -1,0 +1,18 @@
+#mapid {
+	text-align: center;
+	height: 50%;
+	width: 100%;
+}
+
+.content {
+	margin: auto;
+	width: 75%;
+}
+
+.textContent {
+	text-align: center;
+}
+
+.number {
+	width: 125px;
+}
