@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="demo2/task1/CalculatorJetty/src"/>
+	<classpathentry kind="src" path="demo2/task1/CalculatorSoapService/src/java"/>
+	<classpathentry kind="src" path="demo2/task2/DropBoxClient/src/main/java"/>
+	<classpathentry kind="output" path="demo2/task1/CalculatorJetty/target/classes"/>
+</classpath>
