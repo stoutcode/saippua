@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import mainClient.MainClient;
 
 
-@WebServlet("/DummyClass")
+@WebServlet("/Multiply")
 public class Multiply extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -24,19 +24,26 @@ public class Multiply extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String dummy = request.getParameter("dummy").toString();
-		
-		var client = new MainClient();
-		dummy = client.convert2word(dummy);
-		
+		int status = 400;
+		String message = "Bad request. Check your params";
+		try {
+			String num1 = request.getParameter("num1").toString();
+			String num2 = request.getParameter("num2").toString();
+			
+			var client = new MainClient();
+			
+			int result = -1;
+			result = client.calculate(Integer.parseInt(num1), Integer.parseInt(num2), "multiply");
+			String answer_string = client.convert2word(result);
+			status = 200;
+			message = answer_string;
+		} catch (Exception e) {}
 		Map<String, String> options = new LinkedHashMap<>();
-    	options.put("message", dummy);
+    	options.put("message", message);
 	    String json = new Gson().toJson(options);
-		
-    	 	
 		response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
-	    response.setStatus(666);
+	    response.setStatus(status);
 	    response.getWriter().write(json.toString());
 	}
 
@@ -44,16 +51,7 @@ public class Multiply extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
-		
-/*		
-		PrintWriter out = response.getWriter();
-		out.write("Responce post:searchPublication");  
-		out.flush();
-	    out.close();
-*/		
-		
+		// not implemented
 	}
 
 }
