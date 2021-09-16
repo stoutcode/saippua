@@ -54,7 +54,7 @@ function accountInfoCallback(result) {
 
 function upload() {
 
-	query_str = 'token='+accesstoken+'&path=/home/stout/Pictures/soap_structure2.png';
+	query_str = 'token='+accesstoken+'&path=/home/stout/Pictures/duck_sunglasses.png';
 
 	doAjax('Upload_servlet', query_str, 'uploadCallback', 'post', 0);
 

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.net.URISyntaxException;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,7 +61,10 @@ public class Upload_servlet extends HttpServlet {
 		Path pathFile = Paths.get(sourcePath);
 		byte[] data = Files.readAllBytes(pathFile);
 		
-		String content = "{\"path\": \"images/image_initial_uploaded.png\",\"mode\":\"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}";
+		// Use random number with filename
+		int randomInt = ThreadLocalRandom.current().nextInt(10, 10000 + 1);
+		
+		String content = "{\"path\": \"/images/dropbx_client_image" + randomInt + ".png\",\"mode\":\"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}";
 		URL url = new URL("https://content.dropboxapi.com/2/files/upload");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
