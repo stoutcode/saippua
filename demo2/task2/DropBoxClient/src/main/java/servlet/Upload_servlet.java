@@ -3,12 +3,14 @@ package servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
-import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.net.URISyntaxException;
 
 import javax.servlet.ServletException;
@@ -18,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/Token_servlet")
-public class Token_servlet extends HttpServlet {
+@WebServlet("/Upload_servlet")
+public class Upload_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request,
@@ -33,40 +35,33 @@ public class Token_servlet extends HttpServlet {
 		
 		// set content type so firefox doesn't complain about 'xml parsing error'
 		response.setContentType("text/plain");
-		
-		String code = request.getParameter("code").toString();
+
+		String token = request.getParameter("token").toString();
+		String path = request.getParameter("path").toString();
 		
 		PrintWriter out = response.getWriter();
 		
 		try {
-			accessToken(code, out);
+			uploadFile(token, path, out);
 			
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			
 		}
 	
 		
 	}
 	
-	public void accessToken(String codeStr, PrintWriter out) throws URISyntaxException, IOException {
-		String code = ""+codeStr; //code get from previous step 
-		String appKey = "iqhiwgqtw48a98l"; //get from AppConsole when create the DropBox App
-		String appSecret = "c5wikaabqnfvdt2"; //get from AppConsole when create the DropBox App 
-		String redirectURI="http://localhost:8080/DropBoxClient/"; //any url to where you want to redirect the user
-		StringBuilder tokenUri=new StringBuilder("code=");
-		tokenUri.append(URLEncoder.encode(code,"UTF-8"));
-		tokenUri.append("&grant_type=");
-		tokenUri.append(URLEncoder.encode("authorization_code","UTF-8"));
-		tokenUri.append("&client_id=");
-		tokenUri.append(URLEncoder.encode(appKey,"UTF-8"));
-		tokenUri.append("&client_secret=");
-		tokenUri.append(URLEncoder.encode(appSecret,"UTF-8"));
-		tokenUri.append("&redirect_uri="+redirectURI);
-		URL url=new URL("https://api.dropbox.com/oauth2/token");
+	public void uploadFile(String token, String path, PrintWriter out) throws URISyntaxException, IOException {
+		String access_token = ""+token; 
+		String sourcePath = ""+path; //required file path on local file system
+		Path pathFile = Paths.get(sourcePath);
+		byte[] data = Files.readAllBytes(pathFile);
+		
+		String content = "{\"path\": \"images/image_initial_uploaded.png\",\"mode\":\"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}";
+		URL url = new URL("https://content.dropboxapi.com/2/files/upload");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		String queryResult = "";
@@ -74,12 +69,14 @@ public class Token_servlet extends HttpServlet {
 		try {
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			connection.setRequestProperty("Content-Length", "" + tokenUri.toString().length());
+			connection.setRequestProperty("Authorization", "Bearer "+access_token);
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestProperty("Dropbox-API-Arg", "" + content);
+			connection.setRequestProperty("Content-Length", String.valueOf(data.length));
 			
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
-			outputStreamWriter.write(tokenUri.toString());
-			outputStreamWriter.flush();
+			OutputStream outputStream = connection.getOutputStream();
+			outputStream.write(data);
+			outputStream.flush();
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
@@ -87,22 +84,21 @@ public class Token_servlet extends HttpServlet {
 			StringBuffer response = new StringBuffer();
 			
 			while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
+				response.append(inputLine);
 			}
 			
 			in.close();
-			
 			queryResult = response.toString();
-			
+				
 		} finally {
-		connection.disconnect();
-		
+			connection.disconnect();
 		}
 		
 		out.write(queryResult);
 		
 		out.flush();
 		out.close();
+		
 	}
 
 }

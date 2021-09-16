@@ -41,11 +41,11 @@ public class Accountinfo_servlet extends HttpServlet {
 		try {
 			getAccountInfo(token, account_id, out);
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
 	
 		
@@ -53,14 +53,7 @@ public class Accountinfo_servlet extends HttpServlet {
 	
 	public void getAccountInfo(String tokenStr, String accountIDStr, PrintWriter out) throws URISyntaxException, IOException {
 		String access_token = ""+tokenStr;
-		String content = "{\"account_id\":\"" + accountIDStr + "\"}";
-		
-		System.out.println(content);
-		System.out.println(content);
-		System.out.println(content);
-		System.out.println(content);
-		System.out.println(content);
-		
+		String content = "{\"account_id\": \"" + accountIDStr + "\"}";
 		URL url = new URL("https://api.dropboxapi.com/2/users/get_account");
 		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -73,37 +66,27 @@ public class Accountinfo_servlet extends HttpServlet {
 			connection.setRequestProperty("Authorization", "Bearer " + access_token);
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setRequestProperty("Content-Length", "" + content.length());
-			
-			System.out.println("JA NYT LÄHTEE PYYNTÖ");
-			
+
 			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
 			outputStreamWriter.write(content);
 			outputStreamWriter.flush();
-			
-			System.out.println("SINNE MENI");
-			
-			// Tässä tulee bad request virhe
+
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
-			System.out.println("SIINÄ TULI BUFFEREDREADER");
-			
 			String inputLine;
-			
+
 			StringBuffer response = new StringBuffer();
 			
 			while ((inputLine = in.readLine()) != null) {
-				
-				System.out.println("SITTEN LUETAAN PALAUTUSTA");
-				
 				response.append(inputLine);
+				
 			}
 			
-			System.out.println("PALAUTUS LUETTU");
 			
 			in.close();
-			
+
 			queryResult= response.toString(); 
-			
+
 		} finally {
 			connection.disconnect();
 	
