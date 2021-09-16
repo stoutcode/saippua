@@ -53,5 +53,16 @@ function accountInfoCallback(result) {
 }
 
 function upload() {
-	console.log("uploading...");
+
+	query_str = 'token='+accesstoken+'&path=/home/stout/Pictures/soap_structure2.png';
+
+	doAjax('Upload_servlet', query_str, 'uploadCallback', 'post', 0);
+
+}
+
+function uploadCallback(result) {
+	console.log(result);
+	
+	document.getElementById('results').innerHTML = result;
+
 }
