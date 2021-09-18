@@ -54,7 +54,7 @@ function accountInfoCallback(result) {
 
 function upload() {
 
-	query_str = 'token='+accesstoken+'&path=/home/stout/Pictures/duck_sunglasses.png';
+	query_str = 'token='+accesstoken+'&path=/psyduck.png';
 
 	doAjax('Upload_servlet', query_str, 'uploadCallback', 'post', 0);
 
@@ -66,3 +66,19 @@ function uploadCallback(result) {
 	document.getElementById('results').innerHTML = result;
 
 }
+
+
+function accountStorage() {
+	console.log(accesstoken);
+	console.log(accountId);
+	query_str = 'token='+accesstoken;
+	doAjax('Accountstorage_servlet', query_str, 'accountStorageCallback', 'post', 0);
+}
+
+function accountStorageCallback(result) {
+	console.log(result);
+	
+	document.getElementById('results').innerHTML = result;
+}
+
+

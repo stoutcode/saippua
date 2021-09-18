@@ -47,7 +47,7 @@ public class Connect_servlet extends HttpServlet {
 	
 	public void sendRequest(PrintWriter out) throws URISyntaxException, IOException {
 		// basically builds corresponding GET request that will be returnd to the front-end... 
-		String appKey = "iqhiwgqtw48a98l"; //get from AppConsole when create the DropBox App
+		String appKey = "245s603yn0y2rol"; //get from AppConsole when create the DropBox App
 		String redirectURI="http://localhost:8080/DropBoxClient/"; //any url to where you want to redirect the user
 		
 		URI uri = new URI("https://www.dropbox.com/oauth2/authorize");

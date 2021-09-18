@@ -3,12 +3,12 @@ package servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
-import java.net.URLEncoder;
+
 import java.net.URISyntaxException;
 
 import javax.servlet.ServletException;
@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/Token_servlet")
-public class Token_servlet extends HttpServlet {
+
+
+@WebServlet("/Accountfiles_servlet")
+public class Accountstorage_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request,
@@ -34,13 +36,12 @@ public class Token_servlet extends HttpServlet {
 		// set content type so firefox doesn't complain about 'xml parsing error'
 		response.setContentType("text/plain");
 		
-		String code = request.getParameter("code").toString();
+		String token = request.getParameter("token").toString();
 		
 		PrintWriter out = response.getWriter();
 		
 		try {
-			accessToken(code, out);
-			
+			getAccountStorage(token, out);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			
@@ -52,21 +53,11 @@ public class Token_servlet extends HttpServlet {
 		
 	}
 	
-	public void accessToken(String codeStr, PrintWriter out) throws URISyntaxException, IOException {
-		String code = ""+codeStr; //code get from previous step 
-		String appKey = "245s603yn0y2rol"; //get from AppConsole when create the DropBox App
-		String appSecret = "yqhxg9ao461ejgq"; //get from AppConsole when create the DropBox App 
-		String redirectURI="http://localhost:8080/DropBoxClient/"; //any url to where you want to redirect the user
-		StringBuilder tokenUri=new StringBuilder("code=");
-		tokenUri.append(URLEncoder.encode(code,"UTF-8"));
-		tokenUri.append("&grant_type=");
-		tokenUri.append(URLEncoder.encode("authorization_code","UTF-8"));
-		tokenUri.append("&client_id=");
-		tokenUri.append(URLEncoder.encode(appKey,"UTF-8"));
-		tokenUri.append("&client_secret=");
-		tokenUri.append(URLEncoder.encode(appSecret,"UTF-8"));
-		tokenUri.append("&redirect_uri="+redirectURI);
-		URL url=new URL("https://api.dropbox.com/oauth2/token");
+	public void getAccountStorage(String token, PrintWriter out) throws URISyntaxException, IOException {
+		String access_token = ""+token; 
+		
+
+		URL url = new URL("https://api.dropboxapi.com/2/users/get_space_usage/");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		String queryResult = "";
@@ -74,12 +65,11 @@ public class Token_servlet extends HttpServlet {
 		try {
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			connection.setRequestProperty("Content-Length", "" + tokenUri.toString().length());
+			connection.setRequestProperty("Authorization", "Bearer "+access_token);
 			
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(connection.getOutputStream());
-			outputStreamWriter.write(tokenUri.toString());
-			outputStreamWriter.flush();
+			OutputStream outputStream = connection.getOutputStream();
+
+			outputStream.flush();
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
@@ -87,22 +77,22 @@ public class Token_servlet extends HttpServlet {
 			StringBuffer response = new StringBuffer();
 			
 			while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
+				response.append(inputLine);
 			}
 			
 			in.close();
-			
 			queryResult = response.toString();
-			
+				
 		} finally {
-		connection.disconnect();
-		
+			connection.disconnect();
 		}
 		
 		out.write(queryResult);
 		
 		out.flush();
 		out.close();
+		
 	}
+	
 
 }
