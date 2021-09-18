@@ -17,11 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
-
-@WebServlet("/Accountfiles_servlet")
-public class Accountstorage_servlet extends HttpServlet {
+@WebServlet("/Storage_servlet ")
+public class Storage_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected void doGet(HttpServletRequest request,

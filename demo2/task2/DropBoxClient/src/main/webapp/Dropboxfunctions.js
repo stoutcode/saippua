@@ -72,7 +72,7 @@ function accountStorage() {
 	console.log(accesstoken);
 	console.log(accountId);
 	query_str = 'token='+accesstoken;
-	doAjax('Accountstorage_servlet', query_str, 'accountStorageCallback', 'post', 0);
+	doAjax('Storage_servlet', query_str, 'accountStorageCallback', 'post', 0);
 }
 
 function accountStorageCallback(result) {
