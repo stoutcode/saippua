@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Storage_servlet ")
+@WebServlet("/Storage_servlet")
 public class Storage_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -54,7 +54,7 @@ public class Storage_servlet extends HttpServlet {
 		String access_token = ""+token; 
 		
 
-		URL url = new URL("https://api.dropboxapi.com/2/users/get_space_usage/");
+		URL url = new URL("https://api.dropboxapi.com/2/users/get_space_usage");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		String queryResult = "";
@@ -63,13 +63,9 @@ public class Storage_servlet extends HttpServlet {
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Authorization", "Bearer "+access_token);
-			
-			OutputStream outputStream = connection.getOutputStream();
 
-			outputStream.flush();
-			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			
+
 			String inputLine;
 			StringBuffer response = new StringBuffer();
 			

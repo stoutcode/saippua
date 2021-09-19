@@ -54,8 +54,8 @@ public class Token_servlet extends HttpServlet {
 	
 	public void accessToken(String codeStr, PrintWriter out) throws URISyntaxException, IOException {
 		String code = ""+codeStr; //code get from previous step 
-		String appKey = "245s603yn0y2rol"; //get from AppConsole when create the DropBox App
-		String appSecret = "yqhxg9ao461ejgq"; //get from AppConsole when create the DropBox App 
+		String appKey = "iqhiwgqtw48a98l"; //get from AppConsole when create the DropBox App
+		String appSecret = "c5wikaabqnfvdt2"; //get from AppConsole when create the DropBox App 
 		String redirectURI="http://localhost:8080/DropBoxClient/"; //any url to where you want to redirect the user
 		StringBuilder tokenUri=new StringBuilder("code=");
 		tokenUri.append(URLEncoder.encode(code,"UTF-8"));
