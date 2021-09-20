@@ -27,6 +27,18 @@ function getTokenCallback(result) {
 		parsed = JSON.parse("" + result);
 		accesstoken = parsed['access_token'];
 		accountId = parsed['account_id'];
+		
+		
+		str = "<br> Found token: <br>";
+		str += "<br> Uid: " + parsed['uid'];
+		str += "<br> Token type: " + parsed['token_type'];
+		str += "<br> Token: " + parsed['access_token'];
+		str += "<br> Expires in: " + parsed['expires_in'];
+		str += "<br> Scope" + parsed['scope'];
+		
+		document.getElementById('results').innerHTML = str;
+		
+
 	} catch(error) {
 		console.log(error);
 	}
@@ -41,7 +53,26 @@ function accountInfo() {
 }
 
 function accountInfoCallback(result) {
-	document.getElementById('results').innerHTML = result;
+	document.getElementById('results').innerHTML = result
+	;
+	str = ""
+	try {
+		parsed = JSON.parse("" + result);
+		
+		str = "<br> Account info: <br>";
+		str += "<br> ID: " + parsed['account_id'];
+		str += "<br> Name: " + parsed['name']['display_name'];
+		str += "<br> Email: " + parsed['email']
+		
+		document.getElementById('results').innerHTML = str;
+		
+	} catch(error) {
+		console.log(error);
+	}
+	
+	
+	
+	
 
 }
 
@@ -68,6 +99,31 @@ function accountStorage() {
 function accountStorageCallback(result) {
 	document.getElementById('results').innerHTML = result;
 	
+	str = ""
+	try {
+		parsed = JSON.parse("" + result);
+		
+		str = "<br> Account storage: <br>";
+		str += "<br> Used: " + parsed['used'] + " bytes";
+		str += "<br> Allocated: " + parsed['allocation']['allocated'] + " bytes";
+		
+		document.getElementById('results').innerHTML = str;
+	} catch(error) {
+		console.log(error);
+	}
+	
+	
+	
+}
+
+function makehtml(arr) {
+	
+	var ret = "";
+	for (var obj in arr) {
+		ret += "<br>" + obj + ": '" + arr[obj] + "'";
+	}
+	
+	return ret
 }
 
 
