@@ -19,25 +19,31 @@ public class LanguageResource {
 		try {
 			return languageService.getAllLanguages();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 			return("error");
 		}
 	}
 	
-	// @GET
-	// @Path("/{LanguageID}")
-	// @Produces("application/json")
-	// public Language getLanguage(@PathParam("languageId") long id){
-	// Language language = languageService.getLanguage(id);
-	// return language;
-	// }
-    // 
-	// @POST
-	// @Consumes("application/json")
-	// public Language addLanguage (Language language){
-	// 	return languageService.addLanguage(language);
-	// }
+	 @GET
+	 @Path("/{LanguageID}")
+	 @Produces("application/json")
+	 public String getLanguage(@PathParam("languageId") long id){
+	 String language;
+	try {
+		language = languageService.getLanguage(id);
+		} catch (Exception e) {
+		e.printStackTrace();
+		return("error");
+		}
+	 return language;
+	 }
+     
+	 @POST
+	 @Consumes("application/json")
+	 public String addLanguage (Language language){
+	 	return languageService.addLanguage(language);
+	 }
 
 }
 

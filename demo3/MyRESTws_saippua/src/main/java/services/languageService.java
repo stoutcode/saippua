@@ -11,11 +11,11 @@ public class languageService {
 		return "{\"languages\": \"languages\"}";
 	}
 	
-	public String getLanguage(long languageId)  {
+	public static String getLanguage(long languageId)  {
 		return "{\"language\": \"language\"}";
 	}
 	
-	public String addLanguage(String languageString)  {
+	public static String addLanguage(Language language)  {
 		return "ok";
 	}
 }
