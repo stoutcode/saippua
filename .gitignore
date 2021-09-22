@@ -1,3 +1,5 @@
 target/*
 .project
-demo3/task1/MyRESTws_saippua/target/m2e-wtp/web-resources/META-INF/maven/org.ties4560/MyRESTws_saippua/pom.properties
+pom.xml
+.classpath
+demo3/MyRESTws_saippua/.settings/*

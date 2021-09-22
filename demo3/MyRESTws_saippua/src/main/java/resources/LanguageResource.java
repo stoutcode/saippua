@@ -25,19 +25,19 @@ public class LanguageResource {
 		}
 	}
 	
-	@GET
-	@Path("/{LanguageID}")
-	@Produces("application/json")
-	public Language getLanguage(@PathParam("languageId") long id){
-	Language language = languageService.getLanguage(id);
-	return language;
-	}
-
-	@POST
-	@Consumes("application/json")
-	public Language addLanguage (Language language){
-		return languageService.addLanguage(language);
-	}
+	// @GET
+	// @Path("/{LanguageID}")
+	// @Produces("application/json")
+	// public Language getLanguage(@PathParam("languageId") long id){
+	// Language language = languageService.getLanguage(id);
+	// return language;
+	// }
+    // 
+	// @POST
+	// @Consumes("application/json")
+	// public Language addLanguage (Language language){
+	// 	return languageService.addLanguage(language);
+	// }
 
 }
 
