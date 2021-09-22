@@ -1,4 +1,4 @@
-package org.ties4560.MyRESTws_saippua.resources;
+package resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
