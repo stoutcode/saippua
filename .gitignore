@@ -1,5 +1,4 @@
 target/*
 .project
-pom.xml
 .classpath
 demo3/MyRESTws_saippua/.settings/*
