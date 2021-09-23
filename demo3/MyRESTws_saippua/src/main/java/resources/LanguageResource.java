@@ -44,6 +44,21 @@ public class LanguageResource {
 	 public String addLanguage (Language language){
 	 	return languageService.addLanguage(language);
 	 }
+	 
+//	 @PUT
+//	 @Path("/{publicationId}")
+//	 @Consumes(MediaType.APPLICATION_JSON)
+//	 public Publication updatePublication(@PathParam("publicationId") long id, Publication publication){
+//		 publication.setId(id);
+//		 return publicationService.updatePublication(publication);
+//	 }
+//	 
+//	 @DELETE
+//	 @Path("/{publicationId}")
+//	 public void deletePublication (@PathParam("publicationId") long id){
+//	 publicationService.removePublication (id);
+//	 }
+
 
 }
 
