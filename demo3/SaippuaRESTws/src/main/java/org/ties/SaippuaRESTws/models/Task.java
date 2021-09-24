@@ -10,6 +10,10 @@ public class Task {
 	private String description;
 	private String status;
 	
+	public Task() {
+		
+	}
+	
 	public Task(int id, String language, String description, String status) {
 		this.id = id;
 		this.language = language;
