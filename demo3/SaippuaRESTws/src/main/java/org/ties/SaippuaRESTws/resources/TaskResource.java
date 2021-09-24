@@ -175,4 +175,26 @@ public class TaskResource {
 		
     }
 	
+	@PUT
+	@Path("/teams")
+	@Consumes(MediaType.APPLICATION_JSON)
+    public Map<Object, Object> updateTaskTeam(TaskTeam taskTeam) {
+		
+		System.out.println(taskTeam.getId());
+		System.out.println(taskTeam.getMembers());
+
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		TaskTeam returnTeam = taskService.updateTaskTeam(taskTeam);
+		
+		if (returnTeam == null) {
+			reply.put("TaskTeam", "Could not update the team. Team doesnt exist or something else went wrong.");
+		} else {
+			reply.put("TaskTeam", returnTeam);
+		}
+		
+		reply.put("Links", taskService.getLinks());
+		return reply;
+		
+    }
+	
 }

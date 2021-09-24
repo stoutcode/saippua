@@ -33,7 +33,7 @@ public class TaskService {
 		return tasks;
 	}
 
-	public Task getTaskById(long id) {
+	public Task getTaskById(int id) {
 		Task returnTask = null;
 		
 		for (Task task : tasks) {
@@ -80,9 +80,11 @@ public class TaskService {
 	public Task updateTask(Task updatedTask) {
 		Task returnTask = null;
 		
+		int id = updatedTask.getId();
+		
 		try {
 			for (Task task : tasks) {
-				if(task.getId() == updatedTask.getId()) {
+				if(task.getId() == id) {
 					task = updatedTask;
 					returnTask = updatedTask;
 				}
@@ -196,6 +198,26 @@ public class TaskService {
 			taskTeams.add(taskTeam);
 			returnTeam = taskTeam;
 		}
+		
+		return returnTeam;
+	}
+
+	public TaskTeam updateTaskTeam(TaskTeam taskTeam) {
+		TaskTeam returnTeam = null;
+		
+		int id = taskTeam.getId();
+		
+		try {
+			for (TaskTeam team: taskTeams) {
+				if(team.getId() == id) {
+					team = taskTeam;
+					returnTeam = taskTeam;
+				}
+			}
+		} catch (Exception e) {
+			return returnTeam;
+		}
+		
 		
 		return returnTeam;
 	}
