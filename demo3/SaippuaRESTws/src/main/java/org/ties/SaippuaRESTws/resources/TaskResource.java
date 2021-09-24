@@ -26,6 +26,7 @@ public class TaskResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Map<Object, Object> getInstructions() {
 		return taskService.getInstructions();
+		
     }
 	
 	@GET
@@ -34,9 +35,16 @@ public class TaskResource {
     public Map<Object, Object> getTaskById(@QueryParam("taskId") int id) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.getTaskById(id);
-		reply.put("Task", returnTask);
+		
+		if (returnTask == null) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTask);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
     }
 	
 	@GET
@@ -45,9 +53,16 @@ public class TaskResource {
     public Map<Object, Object> getTask(@PathParam("taskId") int id) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.getTaskById(id);
-		reply.put("Task", returnTask);
+		
+		if (returnTask == null) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTask);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
     }
 	
 	@GET
@@ -55,10 +70,17 @@ public class TaskResource {
 	@Path("/language")
     public Map<Object, Object> getTaskById(@QueryParam("language") String language) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		List<Task> returnTask = taskService.getTasksByLanguage(language);
-		reply.put("Task", returnTask);
+		List<Task> returnTasks = taskService.getTasksByLanguage(language);
+		
+		if (returnTasks == null || returnTasks.size() < 1) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTasks);
+		}
+
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
     }
 	
 	@GET
@@ -66,8 +88,14 @@ public class TaskResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Map<Object, Object> getAllTasks() {
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		List<Task> returnTask = taskService.getAllTasks();
-		reply.put("Tasks", returnTask);
+		List<Task> returnTasks = taskService.getAllTasks();
+		
+		if (returnTasks == null || returnTasks.size() < 1) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTasks);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
         
@@ -78,9 +106,16 @@ public class TaskResource {
 	public Map<Object, Object> addTask(Task task) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
-		reply.put("Task", returnTask);
+		
+		if (returnTask == null) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTask);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
 	}
 	
 	@PUT
@@ -88,9 +123,16 @@ public class TaskResource {
 	public Map<Object, Object> updateTask(Task task) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.updateTask(task);
-		reply.put("Task", returnTask);
+		
+		if (returnTask == null) {
+			reply.put("Task", "none");
+		} else {
+			reply.put("Task", returnTask);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
 	}
 	
 	@GET
@@ -99,20 +141,38 @@ public class TaskResource {
     public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.getTaskTeamById(id);
-		reply.put("TaskTeam", returnTeam);
+		
+		if (returnTeam == null) {
+			reply.put("TaskTeam", "none");
+		} else {
+			reply.put("TaskTeam", returnTeam);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
     }
 	
 	@POST
-	@Path("/{taskId}/team")
+	@Path("/teams")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
+    public Map<Object, Object> getTaskTeam(TaskTeam taskTeam) {
+		
+		System.out.println(taskTeam.getId());
+		System.out.println(taskTeam.getMembers());
+
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
-		reply.put("TaskTeam", returnTeam);
+		TaskTeam returnTeam = taskService.addTaskTeam(taskTeam);
+		
+		if (returnTeam == null) {
+			reply.put("TaskTeam", "Could not create the team. Team for id already exists or something else went wrong.");
+		} else {
+			reply.put("TaskTeam", returnTeam);
+		}
+		
 		reply.put("Links", taskService.getLinks());
 		return reply;
+		
     }
 	
 }

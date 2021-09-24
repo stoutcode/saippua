@@ -24,6 +24,9 @@ public class TaskService {
 		taskTeams = new ArrayList<>();
 		Task test = new Task(0, "Java", "requested state of the art feature to make SISU work", "blocked");
 		tasks.add(test);
+		
+		TaskTeam team1 = new TaskTeam(0, "SuperGuy, SpeedSteve");
+		taskTeams.add(team1);
 	}
 
 	public List<Task> getAllTasks() {
@@ -57,8 +60,17 @@ public class TaskService {
 	public Task addTask(Task task) {
 		
 		task.setId(nextId());
-		task.setLanguage(task.getLanguage().trim());
-		task.setStatus(task.getStatus().trim());
+		
+		String language = task.getLanguage();
+		String status = task.getStatus();
+		
+		if (language != null) {
+			task.setLanguage(language.trim());
+		}
+		
+		if (status!= null) {
+			task.setStatus(status.trim());
+		}
 		
 		tasks.add(task);
 		
@@ -95,7 +107,7 @@ public class TaskService {
 		Link id2 = new Link("/tasks/0", "search by id number");
 		links.add(id2);
 		
-		Link language = new Link("/language", "search by lanugage as parameter, i.e /language?java");
+		Link language = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
 		links.add(language);
 		
 		Link all = new Link("/tasks/all", "get all tasks");
@@ -106,6 +118,12 @@ public class TaskService {
 		
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		links.add(put);
+		
+		Link teamPost = new Link("/teams/", "POST new team as json");
+		links.add(teamPost);
+		
+		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		links.add(teamGet);
 		
 		return links;
 	}
@@ -137,20 +155,23 @@ public class TaskService {
 		return returnTeam;
 	}
 
-	public TaskTeam addTaskTeam(int id, TaskTeam taskTeam) {
-		
+	public TaskTeam addTaskTeam(TaskTeam taskTeam) {		
 		TaskTeam returnTeam = null;
+		int id = taskTeam.getId();
 		
-		Boolean existing = false;
+		Boolean existingTeam = false;
+		Boolean existingTask = false;
 		
 		try {
 			for (Task task : tasks) {
 				if(task.getId() == id) {
 					
+					existingTask = true;
+					
 					try {
 						for (TaskTeam team : taskTeams) {
 							if(team.getId() == id) {
-								existing = true;
+								existingTeam = true;
 								break;
 							}
 						}
@@ -164,14 +185,13 @@ public class TaskService {
 			return returnTeam;
 		}
 		
-		if (!existing) {
-			System.out.println(taskTeam.getId());
-			System.out.println(taskTeam.getMembers());
+		if (existingTask && !existingTeam) {
 			
-			// replace JSON id with id of Task
-			taskTeam.setId(id);
+			String members = taskTeam.getMembers();
 			
-			//taskTeam.replaceMembers("asdasdasd, 21323");
+			if (members != null) {
+				taskTeam.replaceMembers(taskTeam.getMembers().trim());
+			}
 			
 			taskTeams.add(taskTeam);
 			returnTeam = taskTeam;
