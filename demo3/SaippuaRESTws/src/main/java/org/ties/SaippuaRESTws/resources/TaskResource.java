@@ -85,7 +85,7 @@ public class TaskResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Map<Object, Object> getAllTasks() {
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		List<Task> returnTasks = taskService.getAllTasks();
+		List<Task> returnTasks = taskService.getTasks();
 		
 		if (returnTasks == null || returnTasks.size() < 1) {
 			reply.put("Tasks", "none");
@@ -156,10 +156,6 @@ public class TaskResource {
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
     public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
-		
-		System.out.println(taskTeam.getId());
-		System.out.println(taskTeam.getTeam());
-
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
@@ -177,10 +173,6 @@ public class TaskResource {
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
     public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
-		
-		System.out.println(taskTeam.getId());
-		System.out.println(taskTeam.getTeam());
-
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 

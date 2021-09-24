@@ -28,7 +28,7 @@ public class TaskTeam {
 		return this.team;
 	}
 	
-	public void replaceTeam(String names) {
+	public void setTeam(String names) {
 		this.team = names;
 	}
 	

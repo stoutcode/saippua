@@ -11,18 +11,15 @@ import org.ties.SaippuaRESTws.models.TaskTeam;
 
 
 public class TaskService {
-	private List<Task> tasks;
-	private List<TaskTeam> taskTeams;
+	private List<Task> tasks = new ArrayList<>();
+	private List<TaskTeam> taskTeams = new ArrayList<>();
 	private int id = 0;
-	
+
 	private int nextId() {
 		return ++this.id;
 	}
-	
+
 	public TaskService() {
-		tasks = new ArrayList<>();
-		taskTeams = new ArrayList<>();
-		
 		Task test = new Task(0, "Java", "requested state of the art feature to make SISU work", "blocked");
 		tasks.add(test);
 		Task test2 = new Task(1, "C-sharp", "Create windows client", "best effort");
@@ -36,14 +33,12 @@ public class TaskService {
 		}
 		
 		for (TaskTeam team : taskTeams) {
-			team1 = addTaskTeamLinks(team1);
+			team1 = addTaskTeamLinks(team);
 		}
-		
-		
-		
-	}
 
-	public List<Task> getAllTasks() {
+	}
+	
+	public List<Task> getTasks() {
 		return tasks;
 	}
 
@@ -102,6 +97,7 @@ public class TaskService {
 			for (Task task : tasks) {
 				if(task.getId() == id) {
 					task = updatedTask;
+					task = addTaskLinks(task);
 					returnTask = updatedTask;
 				}
 			}
@@ -212,7 +208,7 @@ public class TaskService {
 			taskTeam.setId(id);
 			
 			if (members != null) {
-				taskTeam.replaceTeam(taskTeam.getTeam().trim());
+				taskTeam.setTeam(taskTeam.getTeam().trim());
 			}
 			
 			taskTeam = addTaskTeamLinks(taskTeam);
@@ -232,7 +228,7 @@ public class TaskService {
 				if(team.getId() == id) {
 					// replace id with task id to be sure it's same
 					taskTeam.setId(id);
-					
+					taskTeam = addTaskTeamLinks(taskTeam);
 					team = taskTeam;
 					returnTeam = taskTeam;
 				}
