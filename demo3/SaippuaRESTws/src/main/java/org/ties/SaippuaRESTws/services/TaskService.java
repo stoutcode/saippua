@@ -190,10 +190,10 @@ public class TaskService {
 		}
 		
 		if (existingTask && !existingTeam) {
-			String members = taskTeam.getMembers();
+			String members = taskTeam.getTeam();
 			
 			if (members != null) {
-				taskTeam.replaceMembers(taskTeam.getMembers().trim());
+				taskTeam.replaceTeam(taskTeam.getTeam().trim());
 			}
 			
 			taskTeams.add(taskTeam);

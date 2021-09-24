@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TaskTeam {
 	private int taskId;
-	private String members;
+	private String team;
 	
 	public TaskTeam() {
 		
@@ -13,19 +13,19 @@ public class TaskTeam {
 	
 	public TaskTeam(int id, String members) {
 		this.taskId = id;
-		this.members = members;
+		this.team = members;
 	}
 	
 	public int getId() {
 		return this.taskId;
 	}
 	
-	public String getMembers() {
-		return this.members;
+	public String getTeam() {
+		return this.team;
 	}
 	
-	public void replaceMembers(String names) {
-		this.members = names;
+	public void replaceTeam(String names) {
+		this.team = names;
 	}
 	
 	public void setId(int id) {

@@ -104,6 +104,12 @@ public class TaskResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Map<Object, Object> addTask(Task task) {
+		
+		System.out.println(task.getId());
+		System.out.println(task.getDescription());
+		System.out.println(task.getLanguage());
+		System.out.println(task.getStatus());
+		
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
 		
@@ -159,7 +165,7 @@ public class TaskResource {
     public Map<Object, Object> getTaskTeam(TaskTeam taskTeam) {
 		
 		System.out.println(taskTeam.getId());
-		System.out.println(taskTeam.getMembers());
+		System.out.println(taskTeam.getTeam());
 
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.addTaskTeam(taskTeam);
@@ -181,7 +187,7 @@ public class TaskResource {
     public Map<Object, Object> updateTaskTeam(TaskTeam taskTeam) {
 		
 		System.out.println(taskTeam.getId());
-		System.out.println(taskTeam.getMembers());
+		System.out.println(taskTeam.getTeam());
 
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(taskTeam);
