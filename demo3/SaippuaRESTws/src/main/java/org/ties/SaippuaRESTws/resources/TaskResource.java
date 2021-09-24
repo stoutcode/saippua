@@ -160,15 +160,15 @@ public class TaskResource {
     }
 	
 	@POST
-	@Path("/teams")
+	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTaskTeam(TaskTeam taskTeam) {
+    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
 		
 		System.out.println(taskTeam.getId());
 		System.out.println(taskTeam.getTeam());
 
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		TaskTeam returnTeam = taskService.addTaskTeam(taskTeam);
+		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
 		if (returnTeam == null) {
 			reply.put("TaskTeam", "Could not create the team. Team for id already exists or something else went wrong.");
@@ -182,15 +182,15 @@ public class TaskResource {
     }
 	
 	@PUT
-	@Path("/teams")
+	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(TaskTeam taskTeam) {
+    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
 		
 		System.out.println(taskTeam.getId());
 		System.out.println(taskTeam.getTeam());
 
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		TaskTeam returnTeam = taskService.updateTaskTeam(taskTeam);
+		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
 		if (returnTeam == null) {
 			reply.put("TaskTeam", "Could not update the team. Team doesnt exist or something else went wrong.");

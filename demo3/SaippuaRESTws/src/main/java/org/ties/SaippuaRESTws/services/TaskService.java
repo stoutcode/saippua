@@ -159,9 +159,8 @@ public class TaskService {
 		return returnTeam;
 	}
 
-	public TaskTeam addTaskTeam(TaskTeam taskTeam) {		
+	public TaskTeam addTaskTeam(int id, TaskTeam taskTeam) {		
 		TaskTeam returnTeam = null;
-		int id = taskTeam.getId();
 		
 		Boolean existingTeam = false;
 		Boolean existingTask = false;
@@ -192,6 +191,9 @@ public class TaskService {
 		if (existingTask && !existingTeam) {
 			String members = taskTeam.getTeam();
 			
+			// replace id with task id to be sure it's same
+			taskTeam.setId(id);
+			
 			if (members != null) {
 				taskTeam.replaceTeam(taskTeam.getTeam().trim());
 			}
@@ -203,14 +205,15 @@ public class TaskService {
 		return returnTeam;
 	}
 
-	public TaskTeam updateTaskTeam(TaskTeam taskTeam) {
+	public TaskTeam updateTaskTeam(int id, TaskTeam taskTeam) {
 		TaskTeam returnTeam = null;
-		
-		int id = taskTeam.getId();
 		
 		try {
 			for (TaskTeam team: taskTeams) {
 				if(team.getId() == id) {
+					// replace id with task id to be sure it's same
+					taskTeam.setId(id);
+					
 					team = taskTeam;
 					returnTeam = taskTeam;
 				}
