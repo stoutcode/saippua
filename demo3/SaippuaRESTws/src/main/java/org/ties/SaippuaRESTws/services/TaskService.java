@@ -32,8 +32,6 @@ public class TaskService {
 		Task test2 = new Task(id, "C-sharp", "Create windows client", "best effort");
 		tasks.add(test2);
 		
-		
-		
 		for (Task task : tasks) {
 			task = addTaskLinks(task);
 		}
