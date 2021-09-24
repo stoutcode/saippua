@@ -20,13 +20,19 @@ public class TaskService {
 	}
 
 	public TaskService() {
-		Task test = new Task(0, "Java", "requested state of the art feature to make SISU work", "blocked");
+		
+		id = nextId();
+		Task test = new Task(id, "Java", "requested state of the art feature to make SISU work", "blocked");
 		tasks.add(test);
-		Task test2 = new Task(1, "C-sharp", "Create windows client", "best effort");
+		
+		TaskTeam team1 = new TaskTeam(id, "SuperGuy, SpeedSteve");
+		taskTeams.add(team1);
+		
+		id = nextId();
+		Task test2 = new Task(id, "C-sharp", "Create windows client", "best effort");
 		tasks.add(test2);
 		
-		TaskTeam team1 = new TaskTeam(0, "SuperGuy, SpeedSteve");
-		taskTeams.add(team1);
+		
 		
 		for (Task task : tasks) {
 			task = addTaskLinks(task);
@@ -118,7 +124,7 @@ public class TaskService {
 		Link id = new Link("/tasks/id", "search by id as parameter, i.e. /id?1");
 		links.add(id);
 		
-		Link id2 = new Link("/tasks/0", "search by id number");
+		Link id2 = new Link("/tasks/1", "search by id number");
 		links.add(id2);
 		
 		Link language = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
@@ -133,13 +139,13 @@ public class TaskService {
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		links.add(put);
 		
-		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		Link teamGet = new Link("/task/{1}/team", "GET task team");
 		links.add(teamGet);
 		
-		Link teamPost = new Link("/task/{0}team/", "POST new team as json");
+		Link teamPost = new Link("/task/{1}team/", "POST new team as json");
 		links.add(teamPost);
 		
-		Link teamPut = new Link("/task/{0}team/", "PUT changes to team as json");
+		Link teamPut = new Link("/task/{1}team/", "PUT changes to team as json");
 		links.add(teamPut);
 		
 		return links;
@@ -249,7 +255,7 @@ public class TaskService {
 		Link id = new Link("/tasks/id", "search by id as parameter, i.e. /id?1");
 		task.addLink(id);
 		
-		Link id2 = new Link("/tasks/0", "search by id number");
+		Link id2 = new Link("/tasks/1", "search by id number");
 		task.addLink(id2);
 		
 		Link languageLink = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
@@ -264,7 +270,7 @@ public class TaskService {
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		task.addLink(put);
 		
-		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		Link teamGet = new Link("/task/{1}/team", "GET task team");
 		task.addLink(teamGet);
 		
 		return task;
@@ -276,13 +282,13 @@ public class TaskService {
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		team.addLink(put);
 		
-		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		Link teamGet = new Link("/task/{1}/team", "GET task team");
 		team.addLink(teamGet);
 		
-		Link teamPost = new Link("/task/{0}team/", "POST new team as json");
+		Link teamPost = new Link("/task/{1}/team/", "POST new team as json");
 		team.addLink(teamPost);
 		
-		Link teamPut = new Link("/task/{0}team/", "PUT changes to team as json");
+		Link teamPut = new Link("/task/{1}/team/", "PUT changes to team as json");
 		team.addLink(teamPut);
 		
 		return team;
