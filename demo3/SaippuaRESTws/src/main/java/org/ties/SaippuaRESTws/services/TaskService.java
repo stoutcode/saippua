@@ -24,6 +24,8 @@ public class TaskService {
 		taskTeams = new ArrayList<>();
 		Task test = new Task(0, "Java", "requested state of the art feature to make SISU work", "blocked");
 		tasks.add(test);
+		Task test2 = new Task(1, "C-sharp", "Create windows client", "best effort");
+		tasks.add(test2);
 		
 		TaskTeam team1 = new TaskTeam(0, "SuperGuy, SpeedSteve");
 		taskTeams.add(team1);
@@ -188,7 +190,6 @@ public class TaskService {
 		}
 		
 		if (existingTask && !existingTeam) {
-			
 			String members = taskTeam.getMembers();
 			
 			if (members != null) {

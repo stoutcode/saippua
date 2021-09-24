@@ -73,9 +73,9 @@ public class TaskResource {
 		List<Task> returnTasks = taskService.getTasksByLanguage(language);
 		
 		if (returnTasks == null || returnTasks.size() < 1) {
-			reply.put("Task", "none");
+			reply.put("Tasks", "none");
 		} else {
-			reply.put("Task", returnTasks);
+			reply.put("Tasks", returnTasks);
 		}
 
 		reply.put("Links", taskService.getLinks());
@@ -91,9 +91,9 @@ public class TaskResource {
 		List<Task> returnTasks = taskService.getAllTasks();
 		
 		if (returnTasks == null || returnTasks.size() < 1) {
-			reply.put("Task", "none");
+			reply.put("Tasks", "none");
 		} else {
-			reply.put("Task", returnTasks);
+			reply.put("Tasks", returnTasks);
 		}
 		
 		reply.put("Links", taskService.getLinks());
@@ -185,7 +185,7 @@ public class TaskResource {
 
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(taskTeam);
-		
+
 		if (returnTeam == null) {
 			reply.put("TaskTeam", "Could not update the team. Team doesnt exist or something else went wrong.");
 		} else {
