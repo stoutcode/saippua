@@ -22,6 +22,7 @@ public class TaskService {
 	public TaskService() {
 		tasks = new ArrayList<>();
 		taskTeams = new ArrayList<>();
+		
 		Task test = new Task(0, "Java", "requested state of the art feature to make SISU work", "blocked");
 		tasks.add(test);
 		Task test2 = new Task(1, "C-sharp", "Create windows client", "best effort");
@@ -29,6 +30,17 @@ public class TaskService {
 		
 		TaskTeam team1 = new TaskTeam(0, "SuperGuy, SpeedSteve");
 		taskTeams.add(team1);
+		
+		for (Task task : tasks) {
+			task = addTaskLinks(task);
+		}
+		
+		for (TaskTeam team : taskTeams) {
+			team1 = addTaskTeamLinks(team1);
+		}
+		
+		
+		
 	}
 
 	public List<Task> getAllTasks() {
@@ -73,6 +85,8 @@ public class TaskService {
 		if (status!= null) {
 			task.setStatus(status.trim());
 		}
+		
+		addTaskLinks(task);
 		
 		tasks.add(task);
 		
@@ -123,11 +137,14 @@ public class TaskService {
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		links.add(put);
 		
-		Link teamPost = new Link("/teams/", "POST new team as json");
-		links.add(teamPost);
-		
 		Link teamGet = new Link("/task/{0}/team", "GET task team");
 		links.add(teamGet);
+		
+		Link teamPost = new Link("/task/{0}team/", "POST new team as json");
+		links.add(teamPost);
+		
+		Link teamPut = new Link("/task/{0}team/", "PUT changes to team as json");
+		links.add(teamPut);
 		
 		return links;
 	}
@@ -198,6 +215,8 @@ public class TaskService {
 				taskTeam.replaceTeam(taskTeam.getTeam().trim());
 			}
 			
+			taskTeam = addTaskTeamLinks(taskTeam);
+			
 			taskTeams.add(taskTeam);
 			returnTeam = taskTeam;
 		}
@@ -224,6 +243,54 @@ public class TaskService {
 		
 		
 		return returnTeam;
+	}
+	
+	private Task addTaskLinks(Task task) {
+		
+		Link instructions = new Link("/", "instructions");
+		task.addLink(instructions);
+		
+		Link id = new Link("/tasks/id", "search by id as parameter, i.e. /id?1");
+		task.addLink(id);
+		
+		Link id2 = new Link("/tasks/0", "search by id number");
+		task.addLink(id2);
+		
+		Link languageLink = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
+		task.addLink(languageLink);
+		
+		Link all = new Link("/tasks/all", "get all tasks");
+		task.addLink(all);
+		
+		Link post = new Link("/tasks/", "POST new link as json");
+		task.addLink(post);
+		
+		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
+		task.addLink(put);
+		
+		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		task.addLink(teamGet);
+		
+		return task;
+
+	}
+	
+	private TaskTeam addTaskTeamLinks(TaskTeam team) {
+		
+		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
+		team.addLink(put);
+		
+		Link teamGet = new Link("/task/{0}/team", "GET task team");
+		team.addLink(teamGet);
+		
+		Link teamPost = new Link("/task/{0}team/", "POST new team as json");
+		team.addLink(teamPost);
+		
+		Link teamPut = new Link("/task/{0}team/", "PUT changes to team as json");
+		team.addLink(teamPut);
+		
+		return team;
+		
 	}
 	
 }

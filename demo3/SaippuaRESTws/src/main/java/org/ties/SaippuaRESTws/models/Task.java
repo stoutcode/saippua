@@ -1,6 +1,9 @@
 package org.ties.SaippuaRESTws.models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -9,6 +12,7 @@ public class Task {
 	private String language;
 	private String description;
 	private String status;
+	private List<Link> links = new ArrayList<>();
 	
 	public Task() {
 		
@@ -37,6 +41,10 @@ public class Task {
 		this.status = status;
 	}
 	
+	public void addLink(Link link) {
+		this.links.add(link);
+	}
+	
 	public int getId() {
 		return this.id;
 	}
@@ -51,6 +59,10 @@ public class Task {
 	
 	public String getStatus() {
 		return this.status;
+	}
+	
+	public List<Link> getLinks() {
+		return this.links;
 	}
 
 }

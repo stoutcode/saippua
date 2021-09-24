@@ -41,8 +41,7 @@ public class TaskResource {
 		} else {
 			reply.put("Task", returnTask);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
     }
@@ -59,8 +58,7 @@ public class TaskResource {
 		} else {
 			reply.put("Task", returnTask);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
     }
@@ -78,7 +76,6 @@ public class TaskResource {
 			reply.put("Tasks", returnTasks);
 		}
 
-		reply.put("Links", taskService.getLinks());
 		return reply;
 		
     }
@@ -96,7 +93,6 @@ public class TaskResource {
 			reply.put("Tasks", returnTasks);
 		}
 		
-		reply.put("Links", taskService.getLinks());
 		return reply;
         
     }
@@ -118,8 +114,7 @@ public class TaskResource {
 		} else {
 			reply.put("Task", returnTask);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
 	}
@@ -135,8 +130,7 @@ public class TaskResource {
 		} else {
 			reply.put("Task", returnTask);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
 	}
@@ -153,8 +147,7 @@ public class TaskResource {
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
     }
@@ -175,8 +168,7 @@ public class TaskResource {
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
     }
@@ -197,8 +189,7 @@ public class TaskResource {
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
-		
-		reply.put("Links", taskService.getLinks());
+
 		return reply;
 		
     }
