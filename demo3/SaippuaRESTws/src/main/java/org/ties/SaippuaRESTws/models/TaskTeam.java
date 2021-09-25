@@ -14,7 +14,7 @@ public class TaskTeam {
 	public TaskTeam() {
 		
 	}
-	
+
 	public TaskTeam(int id, String members) {
 		this.taskId = id;
 		this.team = members;
@@ -36,7 +36,8 @@ public class TaskTeam {
 		this.taskId = id;
 	}
 	
-	public void addLink(Link link) {
+	public void addLink(String href, String rel) {
+		Link link = new Link(href, rel);
 		this.links.add(link);
 	}
 	

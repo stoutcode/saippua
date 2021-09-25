@@ -41,7 +41,8 @@ public class Task {
 		this.status = status;
 	}
 	
-	public void addLink(Link link) {
+	public void addLink(String href, String rel) {
+		Link link = new Link(href, rel);
 		this.links.add(link);
 	}
 	

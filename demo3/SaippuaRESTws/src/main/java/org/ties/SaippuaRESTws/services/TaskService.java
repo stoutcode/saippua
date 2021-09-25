@@ -137,13 +137,13 @@ public class TaskService {
 		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
 		links.add(put);
 		
-		Link teamGet = new Link("/task/{1}/team", "GET task team");
+		Link teamGet = new Link("/tasks/{1}/team", "GET task team");
 		links.add(teamGet);
 		
-		Link teamPost = new Link("/task/{1}team/", "POST new team as json");
+		Link teamPost = new Link("/tasks/{1}team/", "POST new team as json");
 		links.add(teamPost);
 		
-		Link teamPut = new Link("/task/{1}team/", "PUT changes to team as json");
+		Link teamPut = new Link("/tasks/{1}team/", "PUT changes to team as json");
 		links.add(teamPut);
 		
 		return links;
@@ -246,48 +246,25 @@ public class TaskService {
 	}
 	
 	private Task addTaskLinks(Task task) {
-		
-		Link instructions = new Link("/", "instructions");
-		task.addLink(instructions);
-		
-		Link id = new Link("/tasks/id", "search by id as parameter, i.e. /id?1");
-		task.addLink(id);
-		
-		Link id2 = new Link("/tasks/1", "search by id number");
-		task.addLink(id2);
-		
-		Link languageLink = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
-		task.addLink(languageLink);
-		
-		Link all = new Link("/tasks/all", "get all tasks");
-		task.addLink(all);
-		
-		Link post = new Link("/tasks/", "POST new link as json");
-		task.addLink(post);
-		
-		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
-		task.addLink(put);
-		
-		Link teamGet = new Link("/task/{1}/team", "GET task team");
-		task.addLink(teamGet);
+
+		task.addLink("/", "instructions");
+		task.addLink("/tasks/id", "search by id as parameter, i.e. /id?1");
+		task.addLink("/tasks/1", "search by id number");
+		task.addLink("/tasks/language", "search by lanugage as parameter, i.e /language?java");
+		task.addLink("/tasks/all", "get all tasks");
+		task.addLink("/tasks/", "POST new link as json");
+		task.addLink("/tasks/", "PUT changes to existing link with same id");
+		task.addLink("/tasks/{1}/team", "GET task team");
 		
 		return task;
 
 	}
 	
 	private TaskTeam addTaskTeamLinks(TaskTeam team) {
-		
-		Link put = new Link("/tasks/", "PUT changes to existing link with same id");
-		team.addLink(put);
-		
-		Link teamGet = new Link("/task/{1}/team", "GET task team");
-		team.addLink(teamGet);
-		
-		Link teamPost = new Link("/task/{1}/team/", "POST new team as json");
-		team.addLink(teamPost);
-		
-		Link teamPut = new Link("/task/{1}/team/", "PUT changes to team as json");
-		team.addLink(teamPut);
+		team.addLink("/tasks/", "PUT changes to existing link with same id");
+		team.addLink("/tasks/{1}/team", "GET task team");
+		team.addLink("/tasks/{1}/team/", "POST new team as json");
+		team.addLink("/tasks/{1}/team/", "PUT changes to team as json");
 		
 		return team;
 		
