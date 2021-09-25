@@ -20,7 +20,7 @@ import org.ties.SaippuaRESTws.services.TaskService;
 
 @Path("tasks")
 public class TaskResource {
-	TaskService taskService = new TaskService();
+	private TaskService taskService = new TaskService();
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
