@@ -18,7 +18,14 @@ public class LangService {
 	}
 	
 	public LangService() {
-		int id = 0; 
+		int test = this.langs.size();
+		if(test == 0) {
+			initialize();
+		}
+	}
+	
+	private void initialize() {
+		int id = 0;
 		nextId();
 		
 		Language lang = new Language(id, "Java", "Truly a great enterprise language", "Object-oriented language");
@@ -26,8 +33,9 @@ public class LangService {
 		lang.addSnippet("int id = 0;");
 		
 		this.langs.add(lang);
+		
 	}
-	
+
 	public Language getFirstLang() {
 		return this.langs.get(0);
 	}
@@ -36,7 +44,7 @@ public class LangService {
 		return this.langs;
 	}
 
-	public Language getLangById(long id) {
+	public Language getLangById(int id) {
 		Language returnLang = null;
 		
 		for (Language lang : langs) {
@@ -68,7 +76,6 @@ public class LangService {
 		instructions.put("Fields", getFields());
 		instructions.put("Links", getLinks());
 	
-		
 		return instructions;
 	}
 	
@@ -81,9 +88,7 @@ public class LangService {
 		fields.add("type: what kind of programming language is this language");
 		fields.add("<snippets>: list of snippets aka. exapmles of how programming language works");
 		
-
-		return fields;
-		
+		return fields;	
 	}
 
 	public List<Link> getLinks() {
@@ -119,43 +124,42 @@ public class LangService {
 		return links;
 	}
 	
-	public Language addSnippet(String snippet, int id){
+	public Language addSnippet(Snippet snippet, int id){
 		Language returnLang = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
-					lang.addSnippet(snippet);				
+					String snip = snippet.getSnippet();
+					lang.addSnippet(snip);					
 					returnLang = lang;
 				}
 			}
 		} catch (Exception e) {
 			return returnLang;
 		}
-		
 		
 		return returnLang;
 	}
 	
-	public Language updateSnippet(String snippet, int id){
+	public Language updateSnippet(Snippet snippet, int id){
 		Language returnLang = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
-					lang.addSnippet(snippet);				
+					String snip = snippet.getSnippet();
+					lang.addSnippet(snip);				
 					returnLang = lang;
 				}
 			}
 		} catch (Exception e) {
 			return returnLang;
 		}
-		
 		
 		return returnLang;
 	}
 
-	
 	public Language addLang(Language lang) {
 		
 		Language returnLang = null;
@@ -195,11 +199,10 @@ public class LangService {
 			return returnLang;
 		}
 		
-		
 		return returnLang;
 	}
 
-	public Language removeLanguage(long id) {
+	public Language removeLanguage(int id) {
 		Language returnLang = null;
 		
 		try {
@@ -213,8 +216,8 @@ public class LangService {
 		} catch (Exception e) {
 			return returnLang;
 		}
+		
 		return returnLang;
 	}
-	
-	
 }
+

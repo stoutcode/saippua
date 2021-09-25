@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,7 +18,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.ties.SaippuaRESTws.models.Language;
-import org.ties.SaippuaRESTws.models.TaskTeam;
+import org.ties.SaippuaRESTws.models.Snippet;
 import org.ties.SaippuaRESTws.services.LangService;
 
 @Path("languages")
@@ -25,7 +27,7 @@ public class LanguageResource {
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getInstructions(@PathParam("langId") long id) {
+    public Map<Object, Object> getInstructions(@PathParam("langId") int id) {
         return langService.getInstructions();
     }
 	
@@ -39,7 +41,7 @@ public class LanguageResource {
 	@GET
 	@Path("/{langId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTask(@PathParam("langId") long id) {
+    public Map<Object, Object> getTask(@PathParam("langId") int id) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.getLangById(id);
 		
@@ -119,7 +121,7 @@ public class LanguageResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Map<Object, Object> deleteLanguage (@PathParam("id") long id){
+	public Map<Object, Object> deleteLanguage (@PathParam("id") int id){
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.removeLanguage (id);
 		
@@ -134,7 +136,7 @@ public class LanguageResource {
 	@POST
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> addSnippet(@PathParam("langId") int id, String snippet) {
+    public Map<Object, Object> addSnippet(@PathParam("langId") int id, Snippet snippet) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.addSnippet(snippet, id);
 		
@@ -151,9 +153,11 @@ public class LanguageResource {
 	@PUT
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(@PathParam("langId") int id, String snippet) {
+    public Map<Object, Object> updateTaskTeam(@PathParam("langId") int id, Snippet snippet) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		Language language = langService.addSnippet(snippet, id);
+		
+		System.out.println(snippet);
+		Language language = langService.updateSnippet(snippet, id);
 
 		if (language == null) {
 			reply.put("Snippet", "Could not add snippet. Something went wrong");

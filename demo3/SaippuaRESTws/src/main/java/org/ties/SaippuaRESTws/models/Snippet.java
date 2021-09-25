@@ -8,6 +8,14 @@ public class Snippet {
 	private int languageid;
 	private String snippet;
 	
+	public Snippet() {
+		
+	}
+	
+	public Snippet(String snippet) {
+		this.snippet = snippet;
+	}
+	
 	public Snippet(int id, int languageid, String snippet) {
 		this.id = id;
 		this.languageid = languageid;
