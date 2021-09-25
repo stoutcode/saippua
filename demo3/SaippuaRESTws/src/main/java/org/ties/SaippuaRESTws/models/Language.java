@@ -42,18 +42,49 @@ public class Language {
 		this.description = description;
 	}
 	
-	public void addSnippet(String snippet) {
+	public Snippet addSnippet(String snippet) {
+		int snipID = snippets.size()+1;
+		snippets.add(new Snippet(snipID, this.id, snippet));
 		
-		snippets.add(new Snippet(snippets.size()+1, this.id, snippet));
+		return getSnippet(snipID);
+		
 	}
 	
-	public void setSnippet(int id, String newsnippet) {
+	public Snippet setSnippet(int id, String newsnippet) {
+		Snippet returnSnip = null;
+
 		for(Snippet snippet : snippets) {
 			if(snippet.getID()==id) {
 				snippet.setSnippet(newsnippet);
+				returnSnip = snippet;
+				return returnSnip;
 			}
 		}
+		return returnSnip;
 	}
+	
+	public Snippet removeSnippet(int id2) {
+		Snippet returnSnip = null;
+		for(Snippet snippet : snippets) {
+			if(snippet.getID()==id) {
+				returnSnip = snippet;
+				snippets.remove(snippet);
+				return returnSnip;
+			}
+		}
+		return returnSnip;
+	}
+	
+	public Snippet getSnippet(int id) {
+		Snippet returnSnip = null;
+		for(Snippet snippet : snippets) {
+			if(snippet.getID()==id) {
+				returnSnip = snippet;
+			}
+		}
+		return returnSnip;
+	}
+
 	
 	public int getId() {
 		return this.id;
@@ -75,6 +106,9 @@ public class Language {
 	public List<Snippet> getSnippets(){
 		return snippets;
 	}
+	
+
+	
 
 	
 }

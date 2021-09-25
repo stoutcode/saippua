@@ -14,6 +14,7 @@ public class Snippet {
 	
 	public Snippet(String snippet) {
 		this.snippet = snippet;
+		
 	}
 	
 	public Snippet(int id, int languageid, String snippet) {

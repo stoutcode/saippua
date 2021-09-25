@@ -121,44 +121,67 @@ public class LangService {
 		
 		Link snippetput = new Link("/languages/snippet/", "PUT modify snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
 		links.add(snippetput);
+		
+		Link snippetdel =  new Link("/languages/snippet/", "DELETE remove snippet from language");
+		links.add(snippetdel);
 		return links;
 	}
 	
 	public Language addSnippet(Snippet snippet, int id){
-		Language returnLang = null;
+		Language returnlanguage = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
 					String snip = snippet.getSnippet();
-					lang.addSnippet(snip);					
-					returnLang = lang;
+					lang.addSnippet(snip);
+					returnlanguage = lang;
+					return returnlanguage;
 				}
 			}
 		} catch (Exception e) {
-			return returnLang;
+			return returnlanguage;
 		}
 		
-		return returnLang;
+		return returnlanguage;
 	}
 	
-	public Language updateSnippet(Snippet snippet, int id){
-		Language returnLang = null;
+	public Language updateSnippet(Snippet snippet,int snipID, int id){
+		Language returnlanguage = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
 					String snip = snippet.getSnippet();
-					lang.addSnippet(snip);				
-					returnLang = lang;
+					lang.setSnippet(snipID, snip);
+					returnlanguage = lang;
 				}
 			}
 		} catch (Exception e) {
-			return returnLang;
+			return returnlanguage;
 		}
 		
-		return returnLang;
+		return returnlanguage;
 	}
+	
+	public Language deleteSnippet(int snipID, int id2) {
+		Language returnlanguage = null;
+	
+		try {
+			for (Language lang : langs) {
+				if(lang.getId() == id) {
+					
+					lang.removeSnippet(id2);
+					returnlanguage = lang;
+					return returnlanguage;
+				}	
+			}
+		} catch (Exception e) {
+			return returnlanguage;
+		}
+	
+	return returnlanguage;
+}
 
 	public Language addLang(Language lang) {
 		
@@ -219,5 +242,7 @@ public class LangService {
 		
 		return returnLang;
 	}
+
+	
 }
 

@@ -153,14 +153,30 @@ public class LanguageResource {
 	@PUT
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(@PathParam("langId") int id, Snippet snippet) {
+    public Map<Object, Object> updateSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, Snippet snippet) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		
-		System.out.println(snippet);
-		Language language = langService.updateSnippet(snippet, id);
+		Language language = langService.updateSnippet(snippet, snipID, id);
 
 		if (language == null) {
 			reply.put("Snippet", "Could not add snippet. Something went wrong");
+		} else {
+			reply.put("Snippet", language);
+		}
+
+		return reply;	
+    }
+	
+	@DELETE
+	@Path("/{langId}/snippet")
+	@Consumes(MediaType.APPLICATION_JSON)
+    public Map<Object, Object> deleteSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID) {
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		
+		Language language = langService.deleteSnippet(snipID, id);
+
+		if (language == null) {
+			reply.put("Snippet", "Could not delete snippet. Something went wrong");
 		} else {
 			reply.put("Snippet", language);
 		}
