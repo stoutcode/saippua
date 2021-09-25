@@ -17,7 +17,7 @@ public class LangService {
 	}
 	
 	public LangService() {
-		Language lang = new Language(0, "Java", "Truly a great enterprise language", "Sadly still breathing", "Object-oriented language");
+		Language lang = new Language(0, "Java", "Truly a great enterprise language", "Object-oriented language");
 		this.langs.add(lang);
 	}
 	
@@ -57,7 +57,7 @@ public class LangService {
 		
 		Map<Object, Object> instructions = new LinkedHashMap<>();
 		
-		instructions.put("Info", "This url is for Taskservice. See list of links.");
+		instructions.put("Info", "This url is for LanguageService. See list of links.");
 		instructions.put("Links", getLinks());
 		
 		return instructions;
@@ -87,7 +87,48 @@ public class LangService {
 		Link put = new Link("/languages/", "PUT changes to existing link with same id");
 		links.add(put);
 		
+		Link snippet = new Link("/languages/snippet/", "POST new snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
+		links.add(snippet);
+		
+		Link snippetput = new Link("/languages/snippet/", "PUT modify snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
+		links.add(snippetput);
 		return links;
+	}
+	
+	public Language addSnippet(String snippet, int id){
+		Language returnLang = null;
+		
+		try {
+			for (Language lang : langs) {
+				if(lang.getId() == id) {
+					lang.addSnippet(snippet);				
+					returnLang = lang;
+				}
+			}
+		} catch (Exception e) {
+			return returnLang;
+		}
+		
+		
+		return returnLang;
+	}
+	
+	public Language updateSnippet(String snippet, int id){
+		Language returnLang = null;
+		
+		try {
+			for (Language lang : langs) {
+				if(lang.getId() == id) {
+					lang.addSnippet(snippet);				
+					returnLang = lang;
+				}
+			}
+		} catch (Exception e) {
+			return returnLang;
+		}
+		
+		
+		return returnLang;
 	}
 
 	
@@ -98,11 +139,10 @@ public class LangService {
 		try {
 			String name = lang.getName();
 			String description = lang.getDescription();
-			String status = lang.getStatus();
 			String type = lang.getType();
 			
 			int id = nextId();
-			Language newLang = new Language(id, name, description, status, type);
+			Language newLang = new Language(id, name, description, type);
 			
 			this.langs.add(newLang);
 			
@@ -133,4 +173,6 @@ public class LangService {
 		
 		return returnLang;
 	}
+	
+	
 }

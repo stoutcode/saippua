@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.ties.SaippuaRESTws.models.Language;
+import org.ties.SaippuaRESTws.models.TaskTeam;
 import org.ties.SaippuaRESTws.services.LangService;
 
 @Path("languages")
@@ -105,5 +106,40 @@ public class LanguageResource {
 
 		return reply;
     }
+	
+	@POST
+	@Path("/{langId}/snippet")
+	@Consumes(MediaType.APPLICATION_JSON)
+    public Map<Object, Object> addSnippet(@PathParam("taskId") int id, String snippet) {
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		Language language = langService.addSnippet(snippet, id);
+		
+		if (language == null) {
+			reply.put("Snippet", "Could not add snippet. Something went wrong");
+		} else {
+			reply.put("Snippet", language);
+		}
+
+		return reply;
+		
+    }
+	
+	@PUT
+	@Path("/{langId}/snippet")
+	@Consumes(MediaType.APPLICATION_JSON)
+    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, String snippet) {
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		Language language = langService.addSnippet(snippet, id);
+
+		if (language == null) {
+			reply.put("Snippet", "Could not add snippet. Something went wrong");
+		} else {
+			reply.put("Snippet", language);
+		}
+
+		return reply;
+		
+    }
+	
 	
 }
