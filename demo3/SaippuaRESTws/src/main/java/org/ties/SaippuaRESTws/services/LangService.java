@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ties.SaippuaRESTws.models.Link;
+import org.ties.SaippuaRESTws.models.Snippet;
 import org.ties.SaippuaRESTws.models.Language;
 
 public class LangService {
@@ -17,7 +18,13 @@ public class LangService {
 	}
 	
 	public LangService() {
-		Language lang = new Language(0, "Java", "Truly a great enterprise language", "Object-oriented language");
+		int id = 0; 
+		nextId();
+		
+		Language lang = new Language(id, "Java", "Truly a great enterprise language", "Object-oriented language");
+		lang.addSnippet("String hello = 'hello world';");
+		lang.addSnippet("int id = 0;");
+		
 		this.langs.add(lang);
 	}
 	
@@ -58,9 +65,25 @@ public class LangService {
 		Map<Object, Object> instructions = new LinkedHashMap<>();
 		
 		instructions.put("Info", "This url is for LanguageService. See list of links.");
+		instructions.put("Fields", getFields());
 		instructions.put("Links", getLinks());
+	
 		
 		return instructions;
+	}
+	
+	public List<String> getFields(){
+		List<String> fields = new ArrayList<String>();
+		
+		fields.add("id: identifying id for language");
+		fields.add("name: name of language");
+		fields.add("description: short description of the language");
+		fields.add("type: what kind of programming language is this language");
+		fields.add("<snippets>: list of snippets aka. exapmles of how programming language works");
+		
+
+		return fields;
+		
 	}
 
 	public List<Link> getLinks() {
@@ -69,23 +92,24 @@ public class LangService {
 		Link instructions = new Link("/", "instructions");
 		links.add(instructions);
 		
-		Link id = new Link("/languages/id", "search by id as parameter, i.e. /id?1");
+		Link id = new Link("/id", "search by id as parameter, i.e. /id?1");
 		links.add(id);
 		
-		Link id2 = new Link("/languages/1", "search by id number");
-		links.add(id2);
-		
-		Link name = new Link("/languages/name", "search by name as parameter, i.e /name?java");
+		Link name = new Link("/name", "search by name as parameter, i.e /name?java");
 		links.add(name);
 		
-		Link all = new Link("/languages/all", "get all tasks");
+		Link all = new Link("/all", "get all tasks");
 		links.add(all);
 		
-		Link post = new Link("/languages/", "POST new link as json");
+		Link post = new Link("/", "POST new language as json");
 		links.add(post);
 		
-		Link put = new Link("/languages/", "PUT changes to existing link with same id");
+		Link put = new Link("/{id}", "PUT changes to existing language with same id");
 		links.add(put);
+		
+		Link del = new Link("/{id}/", "Delete language with same id");
+		links.add(del);
+		
 		
 		Link snippet = new Link("/languages/snippet/", "POST new snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
 		links.add(snippet);
@@ -142,6 +166,7 @@ public class LangService {
 			String type = lang.getType();
 			
 			int id = nextId();
+			
 			Language newLang = new Language(id, name, description, type);
 			
 			this.langs.add(newLang);
@@ -171,6 +196,23 @@ public class LangService {
 		}
 		
 		
+		return returnLang;
+	}
+
+	public Language removeLanguage(long id) {
+		Language returnLang = null;
+		
+		try {
+			for (Language lang : langs) {
+				if(lang.getId() == id) {
+					returnLang = lang;
+					langs.remove(lang);
+					return returnLang;
+				}
+			}
+		} catch (Exception e) {
+			return returnLang;
+		}
 		return returnLang;
 	}
 	

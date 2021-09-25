@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -38,8 +39,17 @@ public class LanguageResource {
 	@GET
 	@Path("/{langId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Language getTask(@PathParam("langId") long id) {
-        return langService.getLangById(id);
+    public Map<Object, Object> getTask(@PathParam("langId") long id) {
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		Language returnLang = langService.getLangById(id);
+		
+		if (returnLang == null ){
+			reply.put("Languages", "no language with this index");
+		} else {
+			reply.put("Languages", returnLang);
+		}
+
+		return reply;
     }
 	
 
@@ -107,10 +117,24 @@ public class LanguageResource {
 		return reply;
     }
 	
+	@DELETE
+	@Path("/{id}")
+	public Map<Object, Object> deleteLanguage (@PathParam("id") long id){
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		Language language = langService.removeLanguage (id);
+		
+		if (language == null) {
+			reply.put("Removed", "Could not remove Language with given ID");
+		} else {
+			reply.put("Removed", language);
+		}
+		return reply;
+	}
+	
 	@POST
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> addSnippet(@PathParam("taskId") int id, String snippet) {
+    public Map<Object, Object> addSnippet(@PathParam("langId") int id, String snippet) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.addSnippet(snippet, id);
 		
@@ -127,7 +151,7 @@ public class LanguageResource {
 	@PUT
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, String snippet) {
+    public Map<Object, Object> updateTaskTeam(@PathParam("langId") int id, String snippet) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.addSnippet(snippet, id);
 

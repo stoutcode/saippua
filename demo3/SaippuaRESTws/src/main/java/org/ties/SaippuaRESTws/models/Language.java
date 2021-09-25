@@ -14,6 +14,10 @@ public class Language {
 	private String type;
 	private List<Snippet> snippets = new ArrayList<>();
 	
+	public Language() {
+		
+	}
+	
 	public Language(int id, String name, String description, String type) {
 		this.id = id;
 		this.name = name;
