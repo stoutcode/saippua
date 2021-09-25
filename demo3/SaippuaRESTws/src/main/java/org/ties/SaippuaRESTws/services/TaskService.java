@@ -269,5 +269,45 @@ public class TaskService {
 		return team;
 		
 	}
+
+	public Task removeTask(int id) {
+		Task returnTask = null;
+		try {
+			for (Task task : tasks) {
+				if(task.getId() == id) {
+					returnTask = task;
+					tasks.remove(task);
+					
+					for (TaskTeam team : taskTeams) {
+						if(team.getId() == id) {
+							taskTeams.remove(team);
+							break;
+						}
+					}
+					
+					break;
+				}
+			}
+		} catch (Exception e) {
+			return returnTask;
+		}
+		return returnTask;
+	}
+
+	public TaskTeam removeTeam(int id) {
+		TaskTeam returnTeam = null;
+		try {
+			for (TaskTeam team : taskTeams) {
+				if(team.getId() == id) {
+					returnTeam = team;
+					taskTeams.remove(team);
+					break;
+				}
+			}
+		} catch (Exception e) {
+			return returnTeam;
+		}
+		return returnTeam;
+	}
 	
 }

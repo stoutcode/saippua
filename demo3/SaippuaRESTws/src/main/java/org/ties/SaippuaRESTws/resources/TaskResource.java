@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -129,6 +130,20 @@ public class TaskResource {
 		
 	}
 	
+	@DELETE
+	@Path("/{id}")
+	public Map<Object, Object> deleteTask(@PathParam("id") int id){
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		Task returntask = taskService.removeTask(id);
+		
+		if (returntask == null) {
+			reply.put("Removed", "Could not remove Task with given ID");
+		} else {
+			reply.put("Removed", returntask);
+		}
+		return reply;
+	}
+	
 	@GET
 	@Path("/{taskId}/team")
     @Produces(MediaType.APPLICATION_JSON)
@@ -179,5 +194,19 @@ public class TaskResource {
 		return reply;
 		
     }
+	
+	@DELETE
+	@Path("/{taskId}/team")
+	public Map<Object, Object> deleteTeam(@PathParam("taskId") int id){
+		Map<Object, Object> reply = new LinkedHashMap<>();
+		TaskTeam returnTeam = taskService.removeTeam(id);
+		
+		if (returnTeam == null) {
+			reply.put("Removed", "Could not remove the team with given ID");
+		} else {
+			reply.put("Removed", returnTeam);
+		}
+		return reply;
+	}
 	
 }
