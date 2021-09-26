@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ties.SaippuaRESTws.models.Snippet;
+import org.ties.SaippuaRESTws.exceptions.CreateException;
 import org.ties.SaippuaRESTws.models.Language;
 
 public class LangService {
@@ -150,6 +151,10 @@ public class LangService {
 }
 
 	public Language addLang(Language lang) {
+		for (Language existingLanguage : this.getAllLangs()) {
+			if (lang.getName().equals(existingLanguage.getName()))
+				throw new CreateException("The language already exists.");
+		}
 		
 		Language returnLang = null;
 		

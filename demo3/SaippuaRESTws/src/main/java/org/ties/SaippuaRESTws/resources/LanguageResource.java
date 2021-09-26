@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.ties.SaippuaRESTws.exceptions.*;
 import org.ties.SaippuaRESTws.models.Language;
 import org.ties.SaippuaRESTws.models.Snippet;
 import org.ties.SaippuaRESTws.services.LangService;
@@ -63,7 +64,7 @@ public class LanguageResource {
 		Language returnLang = langService.getLangById(id);
 		
 		if (returnLang == null ){
-			reply.put("Languages", "no language with this index");
+			throw new DataNotFoundException("No language with this index");
 		} else {
 			reply.put("Languages", returnLang);
 		}
@@ -81,7 +82,7 @@ public class LanguageResource {
 		List<Language> returnLang = langService.getLangsByNameList(name);
 		
 		if (returnLang == null || returnLang.size() < 1 ) {
-			reply.put("Languages", "none");
+			throw new DataNotFoundException();
 		} else {
 			reply.put("Languages", returnLang);
 		}
@@ -98,7 +99,7 @@ public class LanguageResource {
 		List<Language> returnLang = langService.getAllLangs();;
 		
 		if (returnLang == null || returnLang.size() < 1) {
-			reply.put("Languages", "none");
+			throw new DataNotFoundException();
 		} else {
 			reply.put("Languages", returnLang);
 		}
@@ -114,7 +115,7 @@ public class LanguageResource {
 		Language returnLang = langService.addLang(lang);
 		
 		if (returnLang == null) {
-			reply.put("Language", "none");
+			throw new CreateException("Error while creating new language.");
 		} else {
 			addLanguageLinks(uriInfo, returnLang);
 			reply.put("Languages", returnLang);
@@ -132,7 +133,7 @@ public class LanguageResource {
 		Language returnLang = langService.updateLang(id, lang);
 
 		if (returnLang == null) {
-			reply.put("Languages", "Could not update the Language. Language doesnt exist or something else went wrong.");
+			throw new UpdateException("Could not update the Language. Language doesnt exist or something else went wrong.");
 		} else {
 			addLanguageLinks(uriInfo, returnLang);
 			reply.put("Languages", returnLang);
@@ -149,7 +150,7 @@ public class LanguageResource {
 		Language language = langService.removeLanguage (id);
 		
 		if (language == null) {
-			reply.put("Removed", "Could not remove Language with given ID");
+			throw new DeleteException("Could not remove Language with given ID");
 		} else {
 			reply.put("Removed", language);
 		}
@@ -166,7 +167,7 @@ public class LanguageResource {
 		Language language = langService.addSnippet(snippet, id);
 		
 		if (language == null) {
-			reply.put("Snippet", "Could not add snippet. Something went wrong");
+			throw new CreateException("Could not add snippet. Something went wrong");
 		} else {
 			addLanguageLinks(uriInfo, language);
 			reply.put("Snippet", language);
@@ -186,7 +187,7 @@ public class LanguageResource {
 		Language language = langService.updateSnippet(snippet, snipID, id);
 
 		if (language == null) {
-			reply.put("Snippet", "Could not add snippet. Something went wrong");
+			throw new UpdateException("Could not update snippet. Something went wrong");
 		} else {
 			addLanguageLinks(uriInfo, language);
 			reply.put("Snippet", language);
@@ -205,7 +206,7 @@ public class LanguageResource {
 		Snippet snippet = langService.deleteSnippet(snipID, id);
 
 		if (snippet == null) {
-			reply.put("Snippet", "Could not delete snippet. Something went wrong");
+			throw new DeleteException("Could not delete snippet. Something went wrong");
 		} else {
 			reply.put("Snippet", snippet);
 		}
