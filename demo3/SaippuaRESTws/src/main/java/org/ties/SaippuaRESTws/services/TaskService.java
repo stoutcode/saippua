@@ -103,7 +103,7 @@ public class TaskService {
 		
 		Map<Object, Object> instructions = new LinkedHashMap<>();
 		
-		instructions.put("Info", "This url is for Taskservice. See list of links.");
+		instructions.put("Info", "This url is for Taskservice.");
 		
 		return instructions;
 	}

@@ -15,7 +15,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.ties.SaippuaRESTws.models.Language;
 import org.ties.SaippuaRESTws.models.Snippet;
@@ -89,30 +91,31 @@ public class LanguageResource {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> addLang(Language lang) {
+	public Map<Object, Object> addLang(Language lang, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.addLang(lang);
 		
 		if (returnLang == null) {
 			reply.put("Language", "none");
 		} else {
+			addLanguageLinks(uriInfo, returnLang);
 			reply.put("Languages", returnLang);
 		}
 
 		return reply;
 	}
-	
 
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateLang(@PathParam("id") int id, Language lang) {
+    public Map<Object, Object> updateLang(@PathParam("id") int id, Language lang, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.updateLang(id, lang);
 
 		if (returnLang == null) {
 			reply.put("Languages", "Could not update the Language. Language doesnt exist or something else went wrong.");
 		} else {
+			addLanguageLinks(uriInfo, returnLang);
 			reply.put("Languages", returnLang);
 		}
 
@@ -136,13 +139,14 @@ public class LanguageResource {
 	@POST
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> addSnippet(@PathParam("langId") int id, Snippet snippet) {
+    public Map<Object, Object> addSnippet(@PathParam("langId") int id, Snippet snippet, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.addSnippet(snippet, id);
 		
 		if (language == null) {
 			reply.put("Snippet", "Could not add snippet. Something went wrong");
 		} else {
+			addLanguageLinks(uriInfo, language);
 			reply.put("Snippet", language);
 		}
 
@@ -153,7 +157,7 @@ public class LanguageResource {
 	@PUT
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, Snippet snippet) {
+    public Map<Object, Object> updateSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, Snippet snippet, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		
 		Language language = langService.updateSnippet(snippet, snipID, id);
@@ -161,10 +165,11 @@ public class LanguageResource {
 		if (language == null) {
 			reply.put("Snippet", "Could not add snippet. Something went wrong");
 		} else {
+			addLanguageLinks(uriInfo, language);
 			reply.put("Snippet", language);
 		}
 
-		return reply;	
+		return reply;
     }
 	
 	@DELETE
@@ -184,6 +189,21 @@ public class LanguageResource {
 		return reply;
 		
     }
+	
+	private void addLanguageLinks(UriInfo uriInfo, Language returnLang) {
+		
+		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).build().toString();
+		returnLang.addLink(uri1, "self");
+		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).path("/snippet").build().toString();
+		returnLang.addLink(uri2, "post snippets");
+		String uri3 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).path("/snippet?id=id").build().toString();
+		returnLang.addLink(uri3, "put changes to snippet");
+		String uri4 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/all").build().toString();
+		returnLang.addLink(uri4, "all languages");
+		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/name?name=" + returnLang.getName()).build().toString();
+		returnLang.addLink(uri5, "language by name");
+		
+	}
 	
 	
 }
