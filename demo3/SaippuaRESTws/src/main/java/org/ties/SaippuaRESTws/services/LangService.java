@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.ties.SaippuaRESTws.models.Link;
 import org.ties.SaippuaRESTws.models.Snippet;
 import org.ties.SaippuaRESTws.models.Language;
 
@@ -64,9 +63,8 @@ public class LangService {
 		
 		Map<Object, Object> instructions = new LinkedHashMap<>();
 		
-		instructions.put("Info", "This url is for LanguageService. See list of links.");
+		instructions.put("Info", "This url is for LanguageService.");
 		instructions.put("Fields", getFields());
-		instructions.put("Links", getLinks());
 	
 		return instructions;
 	}
@@ -81,42 +79,6 @@ public class LangService {
 		fields.add("<snippets>: list of snippets aka. exapmles of how programming language works");
 		
 		return fields;	
-	}
-
-	public List<Link> getLinks() {
-		List<Link> links = new ArrayList<Link>();
-		
-		Link instructions = new Link("/", "instructions");
-		links.add(instructions);
-		
-		Link id = new Link("/id", "search by id as parameter, i.e. /id?1");
-		links.add(id);
-		
-		Link name = new Link("/name", "search by name as parameter, i.e /name?java");
-		links.add(name);
-		
-		Link all = new Link("/all", "get all languages");
-		links.add(all);
-		
-		Link post = new Link("/", "POST new language as json");
-		links.add(post);
-		
-		Link put = new Link("/{id}", "PUT changes to existing language with same id");
-		links.add(put);
-		
-		Link del = new Link("/{id}/", "Delete language with same id");
-		links.add(del);
-		
-		
-		Link snippet = new Link("/languages/snippet/", "POST new snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
-		links.add(snippet);
-		
-		Link snippetput = new Link("/languages/snippet/", "PUT modify snippet relevant to language, i.e /snippet?public String helloWorld() {return \"hello world\"}");
-		links.add(snippetput);
-		
-		Link snippetdel =  new Link("/languages/snippet/", "DELETE remove snippet from language");
-		links.add(snippetdel);
-		return links;
 	}
 	
 	public Language addSnippet(Snippet snippet, int id){

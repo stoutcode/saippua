@@ -13,6 +13,7 @@ public class Language {
 	private String description;
 	private String type;
 	private List<Snippet> snippets = new ArrayList<>();
+	private List<Link> links = new ArrayList<>();
 	
 	public Language() {
 		
@@ -106,9 +107,10 @@ public class Language {
 	public List<Snippet> getSnippets(){
 		return snippets;
 	}
-	
 
-	
-
+	public void addLink(String href, String rel) {
+		Link link = new Link(href, rel);
+		this.links.add(link);
+	}
 	
 }
