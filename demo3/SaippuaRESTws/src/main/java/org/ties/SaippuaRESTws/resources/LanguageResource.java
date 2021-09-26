@@ -106,7 +106,7 @@ public class LanguageResource {
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateLang(@PathParam("taskId") int id, Language lang) {
+    public Map<Object, Object> updateLang(@PathParam("id") int id, Language lang) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.updateLang(id, lang);
 

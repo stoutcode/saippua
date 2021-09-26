@@ -10,38 +10,30 @@ import org.ties.SaippuaRESTws.models.Snippet;
 import org.ties.SaippuaRESTws.models.Language;
 
 public class LangService {
-	private List<Language> langs = new ArrayList<>();
-	private int id = 0;
+	private static List<Language> langs = new ArrayList<>();
+	private static int id = 0;
 	
 	private int nextId() {
-		return ++this.id;
+		return ++id;
 	}
 	
 	public LangService() {
-		int test = this.langs.size();
+		int test = langs.size();
 		if(test == 0) {
 			initialize();
 		}
 	}
 	
 	private void initialize() {
-		int id = 0;
-		nextId();
-		
-		Language lang = new Language(id, "Java", "Truly a great enterprise language", "Object-oriented language");
-		lang.addSnippet("String hello = 'hello world';");
-		lang.addSnippet("int id = 0;");
-		
-		this.langs.add(lang);
 		
 	}
 
 	public Language getFirstLang() {
-		return this.langs.get(0);
+		return langs.get(0);
 	}
 	
 	public List<Language> getAllLangs() {
-		return this.langs;
+		return langs;
 	}
 
 	public Language getLangById(int id) {
@@ -103,7 +95,7 @@ public class LangService {
 		Link name = new Link("/name", "search by name as parameter, i.e /name?java");
 		links.add(name);
 		
-		Link all = new Link("/all", "get all tasks");
+		Link all = new Link("/all", "get all languages");
 		links.add(all);
 		
 		Link post = new Link("/", "POST new language as json");
@@ -147,21 +139,21 @@ public class LangService {
 	}
 	
 	public Language updateSnippet(Snippet snippet,int snipID, int id){
-		Language returnlanguage = null;
+		Language returnSnippet = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
 					String snip = snippet.getSnippet();
 					lang.setSnippet(snipID, snip);
-					returnlanguage = lang;
+					returnSnippet = lang;
 				}
 			}
 		} catch (Exception e) {
-			return returnlanguage;
+			return returnSnippet;
 		}
 		
-		return returnlanguage;
+		return returnSnippet;
 	}
 	
 	public Language deleteSnippet(int snipID, int id2) {
@@ -196,7 +188,7 @@ public class LangService {
 			
 			Language newLang = new Language(id, name, description, type);
 			
-			this.langs.add(newLang);
+			langs.add(newLang);
 			
 			returnLang = newLang;
 			
@@ -210,11 +202,12 @@ public class LangService {
 	
 	public Language updateLang(int id, Language updatedLang) {
 		Language returnLang = null;
-		
+
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
-					lang = updatedLang;
+					updatedLang.setId(id);
+					langs.set(langs.indexOf(lang), updatedLang);
 					returnLang = updatedLang;
 				}
 			}
