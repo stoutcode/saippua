@@ -13,7 +13,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.ties.SaippuaRESTws.exceptions.*;
 import org.ties.SaippuaRESTws.exceptions.NoSuchFieldException;
@@ -34,7 +36,7 @@ public class TaskResource {
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("/id")
-    public Map<Object, Object> getTaskById(@QueryParam("taskId") int id) {
+    public Map<Object, Object> getTaskById(@QueryParam("id") int id) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.getTaskById(id);
 		
@@ -97,13 +99,15 @@ public class TaskResource {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> addTask(Task task) {
+	public Map<Object, Object> addTask(Task task, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
 		
 		if (returnTask == null) {
 			throw new CreateException();
 		} else {
+			
+			addTaskLinks(uriInfo, returnTask);
 			reply.put("Task", returnTask);
 		}
 
@@ -112,13 +116,15 @@ public class TaskResource {
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> updateTask(Task task) {
+	public Map<Object, Object> updateTask(Task task, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.updateTask(task);
 		
 		if (returnTask == null) {
 			throw new UpdateException();
 		} else {
+			
+			addTaskLinks(uriInfo, returnTask);
 			reply.put("Task", returnTask);
 		}
 
@@ -131,12 +137,12 @@ public class TaskResource {
 		for (int i = 0; i < 10; i++)
 			System.out.println(id);
 		Map<Object, Object> reply = new LinkedHashMap<>();
-		Task returntask = taskService.removeTask(id);
-		
-		if (returntask == null) {
+		Task returnTask = taskService.removeTask(id);
+
+		if (returnTask == null) {
 			throw new DeleteException("Could not remove Task with given ID");
 		} else {
-			reply.put("Removed", returntask);
+			reply.put("Removed", returnTask);
 		}
 		return reply;
 	}
@@ -160,13 +166,15 @@ public class TaskResource {
 	@POST
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
+    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
 		if (returnTeam == null) {
 			throw new CreateException("Could not create the team. Team for id already exists or something else went wrong.");
 		} else {
+			
+			addTaskTeamLinks(uriInfo, returnTeam);
 			reply.put("TaskTeam", returnTeam);
 		}
 
@@ -176,13 +184,14 @@ public class TaskResource {
 	@PUT
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam) {
+    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
 		if (returnTeam == null) {
 			throw new UpdateException("Could not update the team. Team doesnt exist or something else went wrong.");
 		} else {
+			addTaskTeamLinks(uriInfo, returnTeam);
 			reply.put("TaskTeam", returnTeam);
 		}
 
@@ -201,6 +210,28 @@ public class TaskResource {
 			reply.put("Removed", returnTeam);
 		}
 		return reply;
+	}
+	
+	private void addTaskLinks(@Context UriInfo uriInfo, Task returnTask) {
+		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).build().toString();
+		returnTask.addLink(uri1, "self");
+		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).path("/team").build().toString();
+		returnTask.addLink(uri2, "team");
+		String uri3 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/all").build().toString();
+		returnTask.addLink(uri3, "all tasks");
+		String uri4 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/language?language=" + returnTask.getLanguage()).build().toString();
+		returnTask.addLink(uri4, "task by language");
+		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/id?id=" + Integer.toString(returnTask.getId())).build().toString();
+		returnTask.addLink(uri5, "task by id");
+		
+	}
+	
+	private void addTaskTeamLinks(@Context UriInfo uriInfo, TaskTeam returnTeam) {
+		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).path("/team").build().toString();
+		returnTeam.addLink(uri1, "self");
+		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).build().toString();
+		returnTeam.addLink(uri2, "task");
+		
 	}
 	
 }
