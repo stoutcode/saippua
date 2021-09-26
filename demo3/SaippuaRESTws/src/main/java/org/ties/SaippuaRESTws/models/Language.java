@@ -113,4 +113,8 @@ public class Language {
 		this.links.add(link);
 	}
 	
+	public List<Link> getLinks() {
+		return this.links;
+	}
+	
 }

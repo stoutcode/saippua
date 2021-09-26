@@ -169,7 +169,7 @@ public class LanguageResource {
 			reply.put("Snippet", language);
 		}
 
-		return reply;	
+		return reply;
     }
 	
 	@DELETE
@@ -191,6 +191,7 @@ public class LanguageResource {
     }
 	
 	private void addLanguageLinks(UriInfo uriInfo, Language returnLang) {
+		
 		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).build().toString();
 		returnLang.addLink(uri1, "self");
 		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).path("/snippet").build().toString();
@@ -201,6 +202,7 @@ public class LanguageResource {
 		returnLang.addLink(uri4, "all languages");
 		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/name?name=" + returnLang.getName()).build().toString();
 		returnLang.addLink(uri5, "language by name");
+		
 	}
 	
 	
