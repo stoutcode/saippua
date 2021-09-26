@@ -31,8 +31,11 @@ public class TaskResource {
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getInstructions() {
-		return taskService.getInstructions();
+    public Response getInstructions(@Context UriInfo uriInfo) {
+		Map<Object, Object> reply = taskService.getInstructions();
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@GET
@@ -77,7 +80,7 @@ public class TaskResource {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Task> returnTasks = taskService.getTasksByLanguage(language);
 		
-		if (returnTasks == null || returnTasks.size() < 1) {
+		if (returnTasks == null) {
 			throw new NoSuchFieldException();
 		} else {
 			reply.put("Tasks", returnTasks);
@@ -94,7 +97,7 @@ public class TaskResource {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Task> returnTasks = taskService.getTasks();
 		
-		if (returnTasks == null || returnTasks.size() < 1) {
+		if (returnTasks == null) {
 			throw new DataNotFoundException();
 		} else {
 			reply.put("Tasks", returnTasks);

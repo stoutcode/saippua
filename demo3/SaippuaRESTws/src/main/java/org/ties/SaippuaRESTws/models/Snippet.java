@@ -38,5 +38,13 @@ public class Snippet {
 	public int getLangID() {
 		return this.languageid;
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setLangId(int id) {
+		this.languageid = id;	
+	}
 	
 }

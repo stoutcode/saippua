@@ -11,9 +11,14 @@ import org.ties.SaippuaRESTws.models.Language;
 public class LangService {
 	private static List<Language> langs = new ArrayList<>();
 	private static int id = 0;
+	private static int snipId = 0;
 	
 	private int nextId() {
 		return ++id;
+	}
+	
+	private int nextSnipId() {
+		return ++snipId;
 	}
 	
 	public LangService() {
@@ -88,7 +93,7 @@ public class LangService {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
 					String snip = snippet.getSnippet();
-					lang.addSnippet(snip);
+					lang.addSnippet(nextSnipId(),snip);
 					returnlanguage = lang;
 					return returnlanguage;
 				}
@@ -100,14 +105,16 @@ public class LangService {
 		return returnlanguage;
 	}
 	
-	public Language updateSnippet(Snippet snippet,int snipID, int id){
+	public Language updateSnippet(Snippet snippet, int snipId, int id){
 		Language returnSnippet = null;
 		
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
+					snippet.setId(snipId);
+					snippet.setLangId(id);
 					String snip = snippet.getSnippet();
-					lang.setSnippet(snipID, snip);
+					lang.setSnippet(snipId, snip);
 					returnSnippet = lang;
 				}
 			}
@@ -118,23 +125,28 @@ public class LangService {
 		return returnSnippet;
 	}
 	
-	public Language deleteSnippet(int snipID, int id2) {
-		Language returnlanguage = null;
-	
+	public Snippet deleteSnippet(int snipId, int id) {
+		Snippet returnSnippet = null;
+		
+		System.out.println("Snippet id: " + snipId + ", Lang id: " + id);
+
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
 					
-					lang.removeSnippet(id2);
-					returnlanguage = lang;
-					return returnlanguage;
+					for (Snippet snip : lang.getSnippets()) {
+						if (snip.getID() == snipId) {
+							returnSnippet = lang.removeSnippet(snipId);
+							return returnSnippet;
+						}
+					}
 				}	
 			}
 		} catch (Exception e) {
-			return returnlanguage;
+			return returnSnippet;
 		}
 	
-	return returnlanguage;
+	return returnSnippet;
 }
 
 	public Language addLang(Language lang) {

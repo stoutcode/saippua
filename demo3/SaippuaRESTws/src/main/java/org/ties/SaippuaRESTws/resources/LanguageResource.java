@@ -2,6 +2,7 @@ package org.ties.SaippuaRESTws.resources;
 
 import java.util.List;
 import java.util.Map;
+import java.net.URI;
 import java.util.LinkedHashMap;
 
 
@@ -17,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.ties.SaippuaRESTws.models.Language;
@@ -29,21 +31,34 @@ public class LanguageResource {
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getInstructions(@PathParam("langId") int id) {
-        return langService.getInstructions();
+    public Response getInstructions(@PathParam("langId") int id, @Context UriInfo uriInfo) {
+		Map<Object, Object> reply = langService.getInstructions();
+
+        URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@GET
 	@Path("/first")
     @Produces(MediaType.APPLICATION_JSON)
-    public Language getFirstLang() {
-        return langService.getFirstLang();
+    public Response getFirstLang(@Context UriInfo uriInfo) {
+		Map<Object, Object> reply = new LinkedHashMap<>();
+        Language returnLang =  langService.getFirstLang();
+        
+        if (returnLang == null ){
+			reply.put("Languages", "no language with this index");
+		} else {
+			reply.put("Languages", returnLang);
+		}
+
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@GET
 	@Path("/{langId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTask(@PathParam("langId") int id) {
+    public Response getTask(@PathParam("langId") int id, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.getLangById(id);
 		
@@ -53,14 +68,15 @@ public class LanguageResource {
 			reply.put("Languages", returnLang);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("/name")
-    public Map<Object, Object> getLangByName(@QueryParam("name") String name) {
+    public Response getLangByName(@QueryParam("name") String name, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Language> returnLang = langService.getLangsByNameList(name);
 		
@@ -70,13 +86,14 @@ public class LanguageResource {
 			reply.put("Languages", returnLang);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 
 	@GET
 	@Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getAllLangs() {
+    public Response getAllLangs(@Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Language> returnLang = langService.getAllLangs();;
 		
@@ -86,12 +103,13 @@ public class LanguageResource {
 			reply.put("Languages", returnLang);
 		}
 		
-		return reply;    
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> addLang(Language lang, @Context UriInfo uriInfo) {
+	public Response addLang(Language lang, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.addLang(lang);
 		
@@ -102,13 +120,14 @@ public class LanguageResource {
 			reply.put("Languages", returnLang);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateLang(@PathParam("id") int id, Language lang, @Context UriInfo uriInfo) {
+    public Response updateLang(@PathParam("id") int id, Language lang, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language returnLang = langService.updateLang(id, lang);
 
@@ -119,12 +138,13 @@ public class LanguageResource {
 			reply.put("Languages", returnLang);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
     }
 	
 	@DELETE
 	@Path("/{id}")
-	public Map<Object, Object> deleteLanguage (@PathParam("id") int id){
+	public Response deleteLanguage (@PathParam("id") int id, @Context UriInfo uriInfo){
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.removeLanguage (id);
 		
@@ -133,13 +153,15 @@ public class LanguageResource {
 		} else {
 			reply.put("Removed", language);
 		}
-		return reply;
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
 	}
 	
 	@POST
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> addSnippet(@PathParam("langId") int id, Snippet snippet, @Context UriInfo uriInfo) {
+    public Response addSnippet(@PathParam("langId") int id, Snippet snippet, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Language language = langService.addSnippet(snippet, id);
 		
@@ -150,14 +172,15 @@ public class LanguageResource {
 			reply.put("Snippet", language);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
 		
     }
 	
 	@PUT
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, Snippet snippet, @Context UriInfo uriInfo) {
+    public Response updateSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, Snippet snippet, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		
 		Language language = langService.updateSnippet(snippet, snipID, id);
@@ -169,24 +192,26 @@ public class LanguageResource {
 			reply.put("Snippet", language);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
     }
 	
 	@DELETE
 	@Path("/{langId}/snippet")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> deleteSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID) {
+    public Response deleteSnippet(@PathParam("langId") int id, @QueryParam("id") int snipID, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		
-		Language language = langService.deleteSnippet(snipID, id);
+		Snippet snippet = langService.deleteSnippet(snipID, id);
 
-		if (language == null) {
+		if (snippet == null) {
 			reply.put("Snippet", "Could not delete snippet. Something went wrong");
 		} else {
-			reply.put("Snippet", language);
+			reply.put("Snippet", snippet);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
 		
     }
 	

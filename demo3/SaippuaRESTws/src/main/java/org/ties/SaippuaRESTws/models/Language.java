@@ -43,11 +43,11 @@ public class Language {
 		this.description = description;
 	}
 	
-	public Snippet addSnippet(String snippet) {
-		int snipID = snippets.size()+1;
-		snippets.add(new Snippet(snipID, this.id, snippet));
-		
-		return getSnippet(snipID);
+	public Snippet addSnippet(int snipId, String snippet) {
+		Snippet newSnippet = new Snippet(snipId, this.id, snippet);
+		snippets.add(newSnippet);
+
+		return newSnippet;
 		
 	}
 	
@@ -64,10 +64,10 @@ public class Language {
 		return returnSnip;
 	}
 	
-	public Snippet removeSnippet(int id2) {
+	public Snippet removeSnippet(int id) {
 		Snippet returnSnip = null;
 		for(Snippet snippet : snippets) {
-			if(snippet.getID()==id) {
+			if(snippet.getID() == id) {
 				returnSnip = snippet;
 				snippets.remove(snippet);
 				return returnSnip;
