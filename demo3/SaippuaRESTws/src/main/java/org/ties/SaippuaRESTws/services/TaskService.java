@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.ties.SaippuaRESTws.models.Link;
 import org.ties.SaippuaRESTws.models.Task;
 import org.ties.SaippuaRESTws.models.TaskTeam;
 
@@ -66,8 +65,6 @@ public class TaskService {
 			task.setStatus(status.trim());
 		}
 		
-		addTaskLinks(task);
-		
 		tasks.add(task);
 		
 		return task;
@@ -81,7 +78,6 @@ public class TaskService {
 		try {
 			for (Task task : tasks) {
 				if(task.getId() == id) {
-					updatedTask = addTaskLinks(updatedTask);
 					tasks.set(tasks.indexOf(task), updatedTask);
 					returnTask = updatedTask;
 				}
@@ -93,49 +89,12 @@ public class TaskService {
 		
 		return returnTask;
 	}
-	
-	public List<Link> getLinks() {
-		List<Link> links = new ArrayList<Link>();
-		
-		Link instructions = new Link("/", "instructions");
-		links.add(instructions);
-		
-		Link id = new Link("/tasks/id", "search by id as parameter, i.e. /id?1");
-		links.add(id);
-		
-		Link id2 = new Link("/tasks/1", "search by id number");
-		links.add(id2);
-		
-		Link language = new Link("/tasks/language", "search by lanugage as parameter, i.e /language?java");
-		links.add(language);
-		
-		Link all = new Link("/tasks/all", "get all tasks");
-		links.add(all);
-		
-		Link post = new Link("/tasks/", "POST new task as json");
-		links.add(post);
-		
-		Link put = new Link("/tasks/", "PUT changes to existing task with same id");
-		links.add(put);
-		
-		Link teamGet = new Link("/tasks/{1}/team", "GET task team");
-		links.add(teamGet);
-		
-		Link teamPost = new Link("/tasks/{1}team/", "POST new team as json");
-		links.add(teamPost);
-		
-		Link teamPut = new Link("/tasks/{1}team/", "PUT changes to team as json");
-		links.add(teamPut);
-		
-		return links;
-	}
 
 	public Map<Object, Object> getInstructions() {
 		
 		Map<Object, Object> instructions = new LinkedHashMap<>();
 		
 		instructions.put("Info", "This url is for Taskservice. See list of links.");
-		instructions.put("Links", getLinks());
 		
 		return instructions;
 	}
@@ -196,8 +155,6 @@ public class TaskService {
 				taskTeam.setTeam(taskTeam.getTeam().trim());
 			}
 			
-			taskTeam = addTaskTeamLinks(taskTeam);
-			
 			taskTeams.add(taskTeam);
 			returnTeam = taskTeam;
 		}
@@ -213,7 +170,6 @@ public class TaskService {
 				if(team.getId() == id) {
 					// replace id with task id to be sure it's same
 					taskTeam.setId(id);
-					taskTeam = addTaskTeamLinks(taskTeam);
 					taskTeams.set(taskTeams.indexOf(team), taskTeam);
 					returnTeam = taskTeam;
 				}
@@ -224,30 +180,6 @@ public class TaskService {
 		
 		
 		return returnTeam;
-	}
-	
-	private Task addTaskLinks(Task task) {
-
-		task.addLink("/", "instructions");
-		task.addLink("/tasks/id", "search by id as parameter, i.e. /id?1");
-		task.addLink("/tasks/1", "search by id number");
-		task.addLink("/tasks/language", "search by lanugage as parameter, i.e /language?java");
-		task.addLink("/tasks/all", "get all tasks");
-		task.addLink("/tasks/", "POST new task as json");
-		task.addLink("/tasks/", "PUT changes to existing task with same id");
-		task.addLink("/tasks/{1}/team", "GET task team");
-		
-		return task;
-
-	}
-	
-	private TaskTeam addTaskTeamLinks(TaskTeam team) {
-		team.addLink("/tasks/{1}/team", "GET task team");
-		team.addLink("/tasks/{1}/team/", "POST new team as json");
-		team.addLink("/tasks/{1}/team/", "PUT changes to team as json");
-		
-		return team;
-		
 	}
 
 	public Task removeTask(int id) {
