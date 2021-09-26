@@ -1,5 +1,6 @@
 package org.ties.SaippuaRESTws.resources;
 
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.ties.SaippuaRESTws.exceptions.*;
@@ -36,7 +38,7 @@ public class TaskResource {
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("/id")
-    public Map<Object, Object> getTaskById(@QueryParam("id") int id) {
+    public Response getTaskById(@QueryParam("id") int id, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.getTaskById(id);
 		
@@ -45,14 +47,16 @@ public class TaskResource {
 		} else {
 			reply.put("Task", returnTask);
 		}
-
-		return reply;
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
+		
     }
 	
 	@GET
 	@Path("/{taskId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTask(@PathParam("taskId") int id) {
+    public Response getTask(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.getTaskById(id);
 		
@@ -62,13 +66,14 @@ public class TaskResource {
 			reply.put("Task", returnTask);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("/language")
-    public Map<Object, Object> getTaskById(@QueryParam("language") String language) {
+    public Response getTaskById(@QueryParam("language") String language, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Task> returnTasks = taskService.getTasksByLanguage(language);
 		
@@ -78,13 +83,14 @@ public class TaskResource {
 			reply.put("Tasks", returnTasks);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@GET
 	@Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getAllTasks() {
+    public Response getAllTasks(@Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Task> returnTasks = taskService.getTasks();
 		
@@ -94,12 +100,13 @@ public class TaskResource {
 			reply.put("Tasks", returnTasks);
 		}
 		
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> addTask(Task task, @Context UriInfo uriInfo) {
+	public Response addTask(Task task, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
 		
@@ -111,12 +118,13 @@ public class TaskResource {
 			reply.put("Task", returnTask);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
 	}
 	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<Object, Object> updateTask(Task task, @Context UriInfo uriInfo) {
+	public Response updateTask(Task task, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.updateTask(task);
 		
@@ -128,12 +136,13 @@ public class TaskResource {
 			reply.put("Task", returnTask);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
 	}
 	
 	@DELETE
 	@Path("/{id}")
-	public Map<Object, Object> deleteTask(@PathParam("id") int id){
+	public Response deleteTask(@PathParam("id") int id, @Context UriInfo uriInfo){
 		for (int i = 0; i < 10; i++)
 			System.out.println(id);
 		Map<Object, Object> reply = new LinkedHashMap<>();
@@ -144,13 +153,15 @@ public class TaskResource {
 		} else {
 			reply.put("Removed", returnTask);
 		}
-		return reply;
+		
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
 	}
 	
 	@GET
 	@Path("/{taskId}/team")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id) {
+    public Response getTaskTeam(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.getTaskTeamById(id);
 		
@@ -160,13 +171,14 @@ public class TaskResource {
 			reply.put("TaskTeam", returnTeam);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
     }
 	
 	@POST
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
+    public Response getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
@@ -178,13 +190,14 @@ public class TaskResource {
 			reply.put("TaskTeam", returnTeam);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
     }
 	
 	@PUT
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Map<Object, Object> updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
+    public Response updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
@@ -195,12 +208,13 @@ public class TaskResource {
 			reply.put("TaskTeam", returnTeam);
 		}
 
-		return reply;
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(reply).build();
     }
 	
 	@DELETE
 	@Path("/{taskId}/team")
-	public Map<Object, Object> deleteTeam(@PathParam("taskId") int id){
+	public Response deleteTeam(@PathParam("taskId") int id, @Context UriInfo uriInfo){
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.removeTeam(id);
 		
@@ -209,7 +223,9 @@ public class TaskResource {
 		} else {
 			reply.put("Removed", returnTeam);
 		}
-		return reply;
+
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.ok(uri).entity(reply).build();
 	}
 	
 	private void addTaskLinks(@Context UriInfo uriInfo, Task returnTask) {
