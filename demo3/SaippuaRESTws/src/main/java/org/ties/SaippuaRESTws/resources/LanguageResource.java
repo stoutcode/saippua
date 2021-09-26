@@ -43,11 +43,11 @@ public class LanguageResource {
 	@Path("/first")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFirstLang(@Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
+		Map<Object, Object> reply = new LinkedHashMap<>();	
         Language returnLang =  langService.getFirstLang();
         
         if (returnLang == null ){
-			reply.put("Languages", "no language with this index");
+        	throw new DataNotFoundException("No languages exist.");
 		} else {
 			reply.put("Languages", returnLang);
 		}
