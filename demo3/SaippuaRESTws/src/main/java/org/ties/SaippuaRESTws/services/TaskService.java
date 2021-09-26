@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.ties.SaippuaRESTws.exceptions.CreateException;
 import org.ties.SaippuaRESTws.models.Link;
 import org.ties.SaippuaRESTws.models.Task;
 import org.ties.SaippuaRESTws.models.TaskTeam;
@@ -45,6 +46,10 @@ public class TaskService {
 	public List<Task> getTasks() {
 		return tasks;
 	}
+	
+	public List<TaskTeam> getTaskTeams() {
+		return taskTeams;
+	}
 
 	public Task getTaskById(int id) {
 		Task returnTask = null;
@@ -71,6 +76,10 @@ public class TaskService {
 	}
 	
 	public Task addTask(Task task) {
+		for (Task existingTask : this.getTasks()) {
+			if (task.getDescription().equals(existingTask.getDescription()))
+				throw new CreateException("Task with the same description already exists.");
+		}
 		
 		task.setId(nextId());
 		
@@ -176,7 +185,12 @@ public class TaskService {
 		return returnTeam;
 	}
 
-	public TaskTeam addTaskTeam(int id, TaskTeam taskTeam) {		
+	public TaskTeam addTaskTeam(int id, TaskTeam taskTeam) {
+		for (TaskTeam existingTask : this.getTaskTeams()) {
+			if (taskTeam.getTeam().equals(existingTask.getTeam()))
+				throw new CreateException("Task team with the same description already exists.");
+		}
+		
 		TaskTeam returnTeam = null;
 		
 		Boolean existingTeam = false;

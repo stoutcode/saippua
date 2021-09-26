@@ -15,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.ties.SaippuaRESTws.exceptions.*;
+import org.ties.SaippuaRESTws.exceptions.NoSuchFieldException;
 import org.ties.SaippuaRESTws.models.Task;
 import org.ties.SaippuaRESTws.models.TaskTeam;
 import org.ties.SaippuaRESTws.services.TaskService;
@@ -27,7 +29,6 @@ public class TaskResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Map<Object, Object> getInstructions() {
 		return taskService.getInstructions();
-		
     }
 	
 	@GET
@@ -38,13 +39,12 @@ public class TaskResource {
 		Task returnTask = taskService.getTaskById(id);
 		
 		if (returnTask == null) {
-			reply.put("Task", "none");
+			throw new NoSuchFieldException();
 		} else {
 			reply.put("Task", returnTask);
 		}
 
 		return reply;
-		
     }
 	
 	@GET
@@ -55,13 +55,12 @@ public class TaskResource {
 		Task returnTask = taskService.getTaskById(id);
 		
 		if (returnTask == null) {
-			reply.put("Task", "none");
+			throw new DataNotFoundException();
 		} else {
 			reply.put("Task", returnTask);
 		}
 
 		return reply;
-		
     }
 	
 	@GET
@@ -72,13 +71,12 @@ public class TaskResource {
 		List<Task> returnTasks = taskService.getTasksByLanguage(language);
 		
 		if (returnTasks == null || returnTasks.size() < 1) {
-			reply.put("Tasks", "none");
+			throw new NoSuchFieldException();
 		} else {
 			reply.put("Tasks", returnTasks);
 		}
 
 		return reply;
-		
     }
 	
 	@GET
@@ -89,13 +87,12 @@ public class TaskResource {
 		List<Task> returnTasks = taskService.getTasks();
 		
 		if (returnTasks == null || returnTasks.size() < 1) {
-			reply.put("Tasks", "none");
+			throw new DataNotFoundException();
 		} else {
 			reply.put("Tasks", returnTasks);
 		}
 		
 		return reply;
-        
     }
 	
 	@POST
@@ -105,13 +102,12 @@ public class TaskResource {
 		Task returnTask = taskService.addTask(task);
 		
 		if (returnTask == null) {
-			reply.put("Task", "none");
+			throw new CreateException();
 		} else {
 			reply.put("Task", returnTask);
 		}
 
 		return reply;
-		
 	}
 	
 	@PUT
@@ -121,23 +117,24 @@ public class TaskResource {
 		Task returnTask = taskService.updateTask(task);
 		
 		if (returnTask == null) {
-			reply.put("Task", "none");
+			throw new UpdateException();
 		} else {
 			reply.put("Task", returnTask);
 		}
 
 		return reply;
-		
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	public Map<Object, Object> deleteTask(@PathParam("id") int id){
+		for (int i = 0; i < 10; i++)
+			System.out.println(id);
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returntask = taskService.removeTask(id);
 		
 		if (returntask == null) {
-			reply.put("Removed", "Could not remove Task with given ID");
+			throw new DeleteException("Could not remove Task with given ID");
 		} else {
 			reply.put("Removed", returntask);
 		}
@@ -152,13 +149,12 @@ public class TaskResource {
 		TaskTeam returnTeam = taskService.getTaskTeamById(id);
 		
 		if (returnTeam == null) {
-			reply.put("TaskTeam", "none");
+			throw new DataNotFoundException();
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
 
 		return reply;
-		
     }
 	
 	@POST
@@ -169,13 +165,12 @@ public class TaskResource {
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
 		if (returnTeam == null) {
-			reply.put("TaskTeam", "Could not create the team. Team for id already exists or something else went wrong.");
+			throw new CreateException("Could not create the team. Team for id already exists or something else went wrong.");
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
 
 		return reply;
-		
     }
 	
 	@PUT
@@ -186,13 +181,12 @@ public class TaskResource {
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
 		if (returnTeam == null) {
-			reply.put("TaskTeam", "Could not update the team. Team doesnt exist or something else went wrong.");
+			throw new UpdateException("Could not update the team. Team doesnt exist or something else went wrong.");
 		} else {
 			reply.put("TaskTeam", returnTeam);
 		}
 
 		return reply;
-		
     }
 	
 	@DELETE
@@ -202,7 +196,7 @@ public class TaskResource {
 		TaskTeam returnTeam = taskService.removeTeam(id);
 		
 		if (returnTeam == null) {
-			reply.put("Removed", "Could not remove the team with given ID");
+			throw new DeleteException("Could not remove the team with given ID");
 		} else {
 			reply.put("Removed", returnTeam);
 		}
