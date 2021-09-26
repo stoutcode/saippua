@@ -178,11 +178,7 @@ public class TaskResource {
 			reply.put("TaskTeam", "Could not create the team. Team for id already exists or something else went wrong.");
 		} else {
 			
-			String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).path("/team").build().toString();
-			returnTeam.addLink(uri1, "self");
-			String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).build().toString();
-			returnTeam.addLink(uri2, "task");
-			
+			addTaskTeamLinks(uriInfo, returnTeam);
 			reply.put("TaskTeam", returnTeam);
 		}
 
@@ -200,6 +196,7 @@ public class TaskResource {
 		if (returnTeam == null) {
 			reply.put("TaskTeam", "Could not update the team. Team doesnt exist or something else went wrong.");
 		} else {
+			addTaskTeamLinks(uriInfo, returnTeam);
 			reply.put("TaskTeam", returnTeam);
 		}
 
@@ -232,6 +229,14 @@ public class TaskResource {
 		returnTask.addLink(uri4, "task by language");
 		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/id?id=" + Integer.toString(returnTask.getId())).build().toString();
 		returnTask.addLink(uri5, "task by id");
+		
+	}
+	
+	private void addTaskTeamLinks(@Context UriInfo uriInfo, TaskTeam returnTeam) {
+		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).path("/team").build().toString();
+		returnTeam.addLink(uri1, "self");
+		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTeam.getId())).build().toString();
+		returnTeam.addLink(uri2, "task");
 		
 	}
 	
