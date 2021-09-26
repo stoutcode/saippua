@@ -110,11 +110,7 @@ public class TaskResource {
 			reply.put("Task", "none");
 		} else {
 			
-			String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).build().toString();
-			returnTask.addLink(uri1, "self");
-			String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).path("/team").build().toString();
-			returnTask.addLink(uri2, "team");
-			
+			addTaskLinks(uriInfo, returnTask);
 			reply.put("Task", returnTask);
 		}
 
@@ -132,11 +128,7 @@ public class TaskResource {
 			reply.put("Task", "none");
 		} else {
 			
-			String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).build().toString();
-			returnTask.addLink(uri1, "self");
-			String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).path("/team").build().toString();
-			returnTask.addLink(uri2, "team");
-			
+			addTaskLinks(uriInfo, returnTask);
 			reply.put("Task", returnTask);
 		}
 
@@ -227,6 +219,20 @@ public class TaskResource {
 			reply.put("Removed", returnTeam);
 		}
 		return reply;
+	}
+	
+	private void addTaskLinks(@Context UriInfo uriInfo, Task returnTask) {
+		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).build().toString();
+		returnTask.addLink(uri1, "self");
+		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnTask.getId())).path("/team").build().toString();
+		returnTask.addLink(uri2, "team");
+		String uri3 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/all").build().toString();
+		returnTask.addLink(uri3, "all tasks");
+		String uri4 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/language?language=" + returnTask.getLanguage()).build().toString();
+		returnTask.addLink(uri4, "task by language");
+		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/id?id=" + Integer.toString(returnTask.getId())).build().toString();
+		returnTask.addLink(uri5, "task by id");
+		
 	}
 	
 }
