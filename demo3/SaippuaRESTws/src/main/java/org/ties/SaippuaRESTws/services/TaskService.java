@@ -126,11 +126,6 @@ public class TaskService {
 	}
 
 	public TaskTeam addTaskTeam(int id, TaskTeam taskTeam) {
-		for (TaskTeam existingTask : this.getTaskTeams()) {
-			if (taskTeam.getTeam().equals(existingTask.getTeam()))
-				throw new CreateException("Task team with the same description already exists.");
-		}
-		
 		TaskTeam returnTeam = null;
 		
 		Boolean existingTeam = false;
