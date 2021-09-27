@@ -128,8 +128,6 @@ public class LangService {
 	
 	public Snippet deleteSnippet(int snipId, int id) {
 		Snippet returnSnippet = null;
-		
-		System.out.println("Snippet id: " + snipId + ", Lang id: " + id);
 
 		try {
 			for (Language lang : langs) {
