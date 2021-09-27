@@ -146,8 +146,6 @@ public class TaskResource {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteTask(@PathParam("id") int id, @Context UriInfo uriInfo){
-		for (int i = 0; i < 10; i++)
-			System.out.println(id);
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.removeTask(id);
 
@@ -156,7 +154,7 @@ public class TaskResource {
 		} else {
 			reply.put("Removed", returnTask);
 		}
-		
+
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.ok(uri).entity(reply).build();
 	}
