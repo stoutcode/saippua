@@ -218,15 +218,15 @@ public class LanguageResource {
 	
 	private void addLanguageLinks(UriInfo uriInfo, Language returnLang) {
 		
-		String uri1 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).build().toString();
+		String uri1 = uriInfo.getBaseUriBuilder().path(LanguageResource.class).path(Integer.toString(returnLang.getId())).build().toString();
 		returnLang.addLink(uri1, "self");
-		String uri2 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).path("/snippet").build().toString();
+		String uri2 = uriInfo.getBaseUriBuilder().path(LanguageResource.class).path(Integer.toString(returnLang.getId())).path("/snippet").build().toString();
 		returnLang.addLink(uri2, "post snippets");
-		String uri3 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path(Integer.toString(returnLang.getId())).path("/snippet?id=id").build().toString();
+		String uri3 = uriInfo.getBaseUriBuilder().path(LanguageResource.class).path(Integer.toString(returnLang.getId())).path("/snippet?id=id").build().toString();
 		returnLang.addLink(uri3, "put changes to snippet");
-		String uri4 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/all").build().toString();
+		String uri4 = uriInfo.getBaseUriBuilder().path(LanguageResource.class).path("/all").build().toString();
 		returnLang.addLink(uri4, "all languages");
-		String uri5 = uriInfo.getBaseUriBuilder().path(TaskResource.class).path("/name?name=" + returnLang.getName()).build().toString();
+		String uri5 = uriInfo.getBaseUriBuilder().path(LanguageResource.class).path("/name?name=" + returnLang.getName()).build().toString();
 		returnLang.addLink(uri5, "language by name");
 		
 	}
