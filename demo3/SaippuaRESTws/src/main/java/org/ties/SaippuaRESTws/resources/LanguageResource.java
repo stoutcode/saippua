@@ -98,7 +98,7 @@ public class LanguageResource {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		List<Language> returnLang = langService.getAllLangs();;
 		
-		if (returnLang == null || returnLang.size() < 1) {
+		if (returnLang == null) {
 			throw new DataNotFoundException();
 		} else {
 			reply.put("Languages", returnLang);
@@ -107,7 +107,7 @@ public class LanguageResource {
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.ok(uri).entity(reply).build();
     }
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addLang(Language lang, @Context UriInfo uriInfo) {
