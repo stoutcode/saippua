@@ -51,8 +51,9 @@ public class TaskResource {
 	public Response addTask(Task task, @Context UriInfo uriInfo) {
 		Task returnTask = taskService.addTask(task);
 		
-		if (returnTask == null)
+		if (returnTask == null) {
 			throw new CreateException();
+		}
 
 		addTaskLinks(uriInfo, returnTask);
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
@@ -78,8 +79,9 @@ public class TaskResource {
     public Response getTask(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
 		Task returnTask = taskService.getTaskById(id);
 		
-		if (returnTask == null)
+		if (returnTask == null) {
 			throw new DataNotFoundException();
+		}
 
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.ok(uri).entity(returnTask).build();
@@ -103,8 +105,9 @@ public class TaskResource {
     public Response getTaskTeam(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
 		TaskTeam returnTeam = taskService.getTaskTeamById(id);
 		
-		if (returnTeam == null)
+		if (returnTeam == null) {
 			throw new DataNotFoundException();
+		}
 
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.ok(uri).entity(returnTeam).build();
@@ -116,8 +119,9 @@ public class TaskResource {
     public Response getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
-		if (returnTeam == null)
+		if (returnTeam == null) {
 			throw new CreateException("Could not create the team. Team for id already exists or something else went wrong.");
+		}
 	
 		addTaskTeamLinks(uriInfo, returnTeam);
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
@@ -130,8 +134,9 @@ public class TaskResource {
     public Response updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
-		if (returnTeam == null)
+		if (returnTeam == null) {
 			throw new UpdateException("Could not update the team. Team doesnt exist or something else went wrong.");
+		}
 
 		addTaskTeamLinks(uriInfo, returnTeam);
 

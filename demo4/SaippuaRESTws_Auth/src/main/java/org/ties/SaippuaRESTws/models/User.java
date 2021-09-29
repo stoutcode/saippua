@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class User implements Principal{
 	private String firstName, lastName,
-	username, email, password;
-	private List<String> role;
+	username, email, password, role;
 	private List<Link> links;
 	
 	public User() {
@@ -19,13 +18,13 @@ public class User implements Principal{
 	
 	public User(String firstName, String lastName,
 		String username, String email,
-		String password){
+		String password, String role){
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.role = new ArrayList<String>();
+		this.role = role;
 		this.links = new ArrayList<Link>();
 	}
 
@@ -82,11 +81,11 @@ public class User implements Principal{
 		this.password = password;
 	}
 
-	public List<String> getRole() {
-		return role;
+	public String getRole() {
+		return this.role;
 	}
 
-	public void setRole(List<String> role) {
+	public void setRole(String role) {
 		this.role = role;
 	}; 
 	
