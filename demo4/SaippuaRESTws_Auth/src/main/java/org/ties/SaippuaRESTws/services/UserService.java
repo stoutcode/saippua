@@ -59,17 +59,6 @@ public class UserService {
 		return true;
 	}
 
-	public User changeUser(User newUser) {
-		User returnUser = null;
-		for (User user : users) {
-			if ( user.getUsername().equals(newUser.getUsername()) ) {
-				users.set(users.indexOf(user), newUser);
-				returnUser = newUser;
-			}
-		}
-		return returnUser;
-	}
-
 	public User deleteUser(String username) {
 		User returnUser = null;
 		for (User user : users) {

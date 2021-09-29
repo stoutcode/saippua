@@ -90,20 +90,6 @@ public class UserResource {
 		return Response.created(uri).entity(returnUser).build();
 	}
 	
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-    public Response updateTaskTeam(User user, @Context UriInfo uriInfo) {
-		User returnUser = userService.changeUser(user);
-
-		if (returnUser == null) {
-			throw new UpdateException("Could not update the user.");
-		}
-		
-		addUserLinks(uriInfo, returnUser);
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(uri).entity(returnUser).build();
-    }
-	
 	@DELETE
 	@Path("/{username}")
 	public Response deleteUser(@PathParam("username") String username, @Context UriInfo uriInfo) {
