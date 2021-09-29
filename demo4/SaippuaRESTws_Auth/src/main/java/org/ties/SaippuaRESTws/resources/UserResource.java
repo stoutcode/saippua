@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.ties.SaippuaRESTws.exceptions.CreateException;
 import org.ties.SaippuaRESTws.exceptions.DataNotFoundException;
-import org.ties.SaippuaRESTws.exceptions.UpdateException;
 import org.ties.SaippuaRESTws.models.ErrorMessage;
 import org.ties.SaippuaRESTws.models.User;
 import org.ties.SaippuaRESTws.services.UserService;
@@ -80,7 +79,7 @@ public class UserResource {
 		}
 
 		User returnUser = userService.setRole(username, role);
-		
+
 		if (returnUser == null) {
 			throw new CreateException("Something went wrong.");
 		}
