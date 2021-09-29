@@ -16,10 +16,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.ties.SaippuaRESTws.exceptions.CreateException;
 import org.ties.SaippuaRESTws.exceptions.DataNotFoundException;
 import org.ties.SaippuaRESTws.exceptions.UpdateException;
+import org.ties.SaippuaRESTws.models.ErrorMessage;
 import org.ties.SaippuaRESTws.models.User;
 import org.ties.SaippuaRESTws.services.UserService;
 
@@ -60,7 +62,7 @@ public class UserResource {
 		User returnUser = userService.addUser(user);
 
 		if (returnUser == null) {
-			throw new CreateException();
+			throw new CreateException("Username already exists, or something else went wrong.");
 		}
 		
 		addUserLinks(uriInfo, returnUser);
@@ -72,13 +74,15 @@ public class UserResource {
 	@Path("/{username}")
 	public Response changeUserRole(@PathParam("username") String username, @QueryParam("role") String role, @Context UriInfo uriInfo) {
 		if (role == null || !userService.isValidRole(role) ) {
-			throw new CreateException();
+			Status status = Status.BAD_REQUEST;
+			ErrorMessage errorMessage = new ErrorMessage("Bad role or user", status.getStatusCode(), "Role must be one of: " + userService.getRoles() + ", User must be one of:" + userService.getUsernames());
+			return Response.status(status).entity(errorMessage).build();
 		}
 
 		User returnUser = userService.setRole(username, role);
 		
 		if (returnUser == null) {
-			throw new CreateException();
+			throw new CreateException("Something went wrong.");
 		}
 		
 		addUserLinks(uriInfo, returnUser);

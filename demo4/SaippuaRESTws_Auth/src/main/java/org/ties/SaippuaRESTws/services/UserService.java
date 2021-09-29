@@ -32,10 +32,33 @@ public class UserService {
 		if ( !isValidRole(user.getRole()) ) {
 			user.setRole("worker");
 		}
-		users.add(user);
-		return user;
+		
+		if (user.getUsername() == null) {
+			return null;
+		} else {
+			user.setUsername(user.getUsername().trim().toLowerCase());
+		}
+		
+		if ( isUniqueUsername(user.getUsername()) ) {
+			users.add(user);
+			return user;
+		} else {
+			return null;
+		}
 	}
 	
+	private boolean isUniqueUsername(String username) {
+		if (username == null || username.trim().equals("") ) {
+			return false;
+		}
+		for (User user : users) {
+			if ( user.getUsername().equals(username) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public User changeUser(User newUser) {
 		User returnUser = null;
 		for (User user : users) {
@@ -76,6 +99,18 @@ public class UserService {
 		} else {
 			return true;
 		}
+	}
+
+	public String getRoles() {
+		return roles.toString();
+	}
+
+	public String getUsernames() {
+		StringBuilder usernames = new StringBuilder();
+		for (User user : users) {
+			usernames.append(" " + user.getUsername() + ",");
+		}
+		return usernames.toString();
 	}
 	
 }
