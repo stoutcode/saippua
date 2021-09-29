@@ -32,6 +32,8 @@ public class SecurityFunctions {
 		
 		String username = tokenizer.nextToken();
 		String password = tokenizer.nextToken();
+		
+		// Prints that can be removed after task is done
 		System.out.println(username);
 		System.out.println(password);
 		
