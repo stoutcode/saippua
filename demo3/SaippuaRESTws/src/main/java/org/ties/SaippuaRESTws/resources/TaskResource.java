@@ -30,82 +30,23 @@ public class TaskResource {
 	TaskService taskService = new TaskService();
 	
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getInstructions(@Context UriInfo uriInfo) {
-		Map<Object, Object> reply = taskService.getInstructions();
-		
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
-    }
-	
-	@GET
-    @Produces(MediaType.APPLICATION_JSON)
-	@Path("/id")
-    public Response getTaskById(@QueryParam("id") int id, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
-		Task returnTask = taskService.getTaskById(id);
-		
-		if (returnTask == null) {
-			throw new NoSuchFieldException();
-		} else {
-			reply.put("Task", returnTask);
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTasks(@QueryParam("language") String language, @Context UriInfo uriInfo) {
+		List<Task> returnTasks = null;
+		if (language == null)
+			returnTasks = taskService.getTasks();
+		else {
+			returnTasks = taskService.getTasksByLanguage(language);
+			if (returnTasks == null)
+				throw new NoSuchFieldException();
 		}
 		
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
-		
-    }
-	
-	@GET
-	@Path("/{taskId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTask(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
-		Task returnTask = taskService.getTaskById(id);
-		
-		if (returnTask == null) {
+		if (returnTasks == null)
 			throw new DataNotFoundException();
-		} else {
-			reply.put("Task", returnTask);
-		}
-
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
-    }
-	
-	@GET
-    @Produces(MediaType.APPLICATION_JSON)
-	@Path("/language")
-    public Response getTaskById(@QueryParam("language") String language, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
-		List<Task> returnTasks = taskService.getTasksByLanguage(language);
-		
-		if (returnTasks == null) {
-			throw new NoSuchFieldException();
-		} else {
-			reply.put("Tasks", returnTasks);
-		}
-
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
-    }
-	
-	@GET
-	@Path("/all")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllTasks(@Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
-		List<Task> returnTasks = taskService.getTasks();
-		
-		if (returnTasks == null) {
-			throw new DataNotFoundException();
-		} else {
-			reply.put("Tasks", returnTasks);
-		}
 		
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
-    }
+		return Response.ok(uri).entity(returnTasks).build();
+	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -113,14 +54,10 @@ public class TaskResource {
 		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
 		
-		if (returnTask == null) {
+		if (returnTask == null)
 			throw new CreateException();
-		} else {
-			
-			addTaskLinks(uriInfo, returnTask);
-			reply.put("Task", returnTask);
-		}
 
+		addTaskLinks(uriInfo, returnTask);
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.created(uri).entity(reply).build();
 	}
@@ -128,20 +65,28 @@ public class TaskResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateTask(Task task, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.updateTask(task);
 		
-		if (returnTask == null) {
+		if (returnTask == null)
 			throw new UpdateException();
-		} else {
-			
-			addTaskLinks(uriInfo, returnTask);
-			reply.put("Task", returnTask);
-		}
+
+		addTaskLinks(uriInfo, returnTask);
+		URI uri = uriInfo.getAbsolutePathBuilder().build();
+		return Response.created(uri).entity(returnTask).build();
+	}
+	
+	@GET
+	@Path("/{taskId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTask(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
+		Task returnTask = taskService.getTaskById(id);
+		
+		if (returnTask == null)
+			throw new DataNotFoundException();
 
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(uri).entity(reply).build();
-	}
+		return Response.ok(uri).entity(returnTask).build();
+    }
 	
 	@DELETE
 	@Path("/{id}")
@@ -158,59 +103,47 @@ public class TaskResource {
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.ok(uri).entity(reply).build();
 	}
-	
+
 	@GET
 	@Path("/{taskId}/team")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTaskTeam(@PathParam("taskId") int id, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.getTaskTeamById(id);
 		
-		if (returnTeam == null) {
+		if (returnTeam == null)
 			throw new DataNotFoundException();
-		} else {
-			reply.put("TaskTeam", returnTeam);
-		}
 
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
+		return Response.ok(uri).entity(returnTeam).build();
     }
-	
+
 	@POST
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
     public Response getTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.addTaskTeam(id, taskTeam);
 		
-		if (returnTeam == null) {
+		if (returnTeam == null)
 			throw new CreateException("Could not create the team. Team for id already exists or something else went wrong.");
-		} else {
-			
-			addTaskTeamLinks(uriInfo, returnTeam);
-			reply.put("TaskTeam", returnTeam);
-		}
-
+	
+		addTaskTeamLinks(uriInfo, returnTeam);
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(uri).entity(reply).build();
+		return Response.created(uri).entity(returnTeam).build();
     }
 	
 	@PUT
 	@Path("/{taskId}/team")
 	@Consumes(MediaType.APPLICATION_JSON)
     public Response updateTaskTeam(@PathParam("taskId") int id, TaskTeam taskTeam, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
 		TaskTeam returnTeam = taskService.updateTaskTeam(id, taskTeam);
 
-		if (returnTeam == null) {
+		if (returnTeam == null)
 			throw new UpdateException("Could not update the team. Team doesnt exist or something else went wrong.");
-		} else {
-			addTaskTeamLinks(uriInfo, returnTeam);
-			reply.put("TaskTeam", returnTeam);
-		}
+
+		addTaskTeamLinks(uriInfo, returnTeam);
 
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(uri).entity(reply).build();
+		return Response.created(uri).entity(returnTeam).build();
     }
 	
 	@DELETE
