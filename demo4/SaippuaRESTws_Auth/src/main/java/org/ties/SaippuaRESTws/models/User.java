@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class User implements Principal{
 	private String firstName, lastName,
 	username, email, password, role;
-	private List<Link> links;
+	private List<Link> links = new ArrayList<Link>();;
 	
 	public User() {
 		
@@ -25,15 +25,10 @@ public class User implements Principal{
 		this.email = email;
 		this.password = password;
 		this.role = role;
-		this.links = new ArrayList<Link>();
 	}
 
 	public List<Link> getLinks() {
 		return links;
-	}
-
-	public void setLinks(List<Link> links) {
-		this.links = links;
 	}
 	
 	public void addLink(String href, String rel) {

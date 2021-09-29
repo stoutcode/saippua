@@ -58,7 +58,7 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addUser(User user, @Context UriInfo uriInfo) {
 		User returnUser = userService.addUser(user);
-		
+
 		if (returnUser == null) {
 			throw new CreateException();
 		}

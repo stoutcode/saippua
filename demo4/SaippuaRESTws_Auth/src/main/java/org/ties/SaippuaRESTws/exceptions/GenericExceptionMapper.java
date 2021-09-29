@@ -14,6 +14,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>{
 	@Override
 	public Response toResponse(Throwable ex) {
 		System.out.println(ex);
+		ex.printStackTrace();
 		String message = ex.getMessage();
 		Status status = Status.BAD_REQUEST;
 		String documentation = "http://google.com";
