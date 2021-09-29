@@ -1,9 +1,7 @@
 package org.ties.SaippuaRESTws.resources;
 
 import java.net.URI;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -51,7 +49,6 @@ public class TaskResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addTask(Task task, @Context UriInfo uriInfo) {
-		Map<Object, Object> reply = new LinkedHashMap<>();
 		Task returnTask = taskService.addTask(task);
 		
 		if (returnTask == null)
@@ -59,7 +56,7 @@ public class TaskResource {
 
 		addTaskLinks(uriInfo, returnTask);
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.created(uri).entity(reply).build();
+		return Response.created(uri).entity(returnTask).build();
 	}
 	
 	@PUT
@@ -89,19 +86,15 @@ public class TaskResource {
     }
 	
 	@DELETE
-	@Path("/{id}")
-	public Response deleteTask(@PathParam("id") int id, @Context UriInfo uriInfo){
-		Map<Object, Object> reply = new LinkedHashMap<>();
+	@Path("/{taskId}")
+	public Response deleteTask(@PathParam("taskId") int id, @Context UriInfo uriInfo){
 		Task returnTask = taskService.removeTask(id);
 
 		if (returnTask == null) {
 			throw new DeleteException("Could not remove Task with given ID");
-		} else {
-			reply.put("Removed", returnTask);
 		}
 
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
+		return Response.ok().build();
 	}
 
 	@GET
@@ -149,17 +142,13 @@ public class TaskResource {
 	@DELETE
 	@Path("/{taskId}/team")
 	public Response deleteTeam(@PathParam("taskId") int id, @Context UriInfo uriInfo){
-		Map<Object, Object> reply = new LinkedHashMap<>();
-		TaskTeam returnTeam = taskService.removeTeam(id);
+		TaskTeam deletedTeam = taskService.removeTeam(id);
 		
-		if (returnTeam == null) {
+		if (deletedTeam == null) {
 			throw new DeleteException("Could not remove the team with given ID");
-		} else {
-			reply.put("Removed", returnTeam);
 		}
 
-		URI uri = uriInfo.getAbsolutePathBuilder().build();
-		return Response.ok(uri).entity(reply).build();
+		return Response.ok().build();
 	}
 	
 	private void addTaskLinks(@Context UriInfo uriInfo, Task returnTask) {

@@ -53,7 +53,7 @@ public class LangService {
 		return returnLang;
 	}
 
-	public List<Language> getLangsByNameList(String language) {
+	public List<Language> getLangsByName(String language) {
 		List<Language> returnLangs = new ArrayList<>();
 		
 		for (Language lang : langs) {
@@ -177,9 +177,9 @@ public class LangService {
 		return returnLang;
 	}
 	
-	public Language updateLang(int id, Language updatedLang) {
+	public Language updateLang(Language updatedLang) {
 		Language returnLang = null;
-
+		int id = updatedLang.getId();
 		try {
 			for (Language lang : langs) {
 				if(lang.getId() == id) {
