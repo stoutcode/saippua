@@ -28,6 +28,10 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>{
 			status = Status.SEE_OTHER;
 		} else if (ex instanceof UpdateException) {
 			status = Status.CONFLICT;
+		} else if (ex instanceof AuthorizationException) {
+			status = Status.UNAUTHORIZED;
+		} else if (ex instanceof ForbiddenException) {
+			status = Status.FORBIDDEN;
 		}
 		
 		int code = status.getStatusCode();

@@ -10,9 +10,7 @@ public class UserService {
 	private static List<User> users = new ArrayList<>();
 	private static List<String> roles = Arrays.asList("admin", "manager", "worker");
 	
-	public UserService() {
-		
-	}
+	public UserService() {}
 	
 	public List<User> getUsers() {
 		return users;
