@@ -12,6 +12,8 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
+import org.ties.SaippuaRESTws.exceptions.CreateException;
+import org.ties.SaippuaRESTws.exceptions.ForbiddenException;
 import org.ties.SaippuaRESTws.models.ErrorMessage;
 
 @Provider
@@ -23,10 +25,11 @@ public class SecurityFilter implements ContainerRequestFilter {
 		
 		
 		String authHeaderVal = requestContext.getHeaderString("Authorization");	
-		
+	
 		if (authHeaderVal  == null) {
 			authHeaderVal = "noAuth";
 		}
+		System.out.println(authHeaderVal);
 		System.out.println("request filter invoked...");
 		
 		//Checks for jwt token
@@ -35,20 +38,23 @@ public class SecurityFilter implements ContainerRequestFilter {
             	
             	final String[] creds = validate(authHeaderVal.split(" ")[1]); //[0] = username & [1] = password
             	System.out.println("Authenticating with JWT..");
-                System.out.println("JWT being tested:\n" + authHeaderVal.split(" ")[1]);
+                
                 
             	if ( requestContext.getUriInfo().getPath().contains("snippets") ) {
         			secFuncs.handleAuth(requestContext, creds[0], creds[1], Arrays.asList("worker", "manager", "admin"));
+        			return;
         		}
         		
         		if ( (requestContext.getUriInfo().getPath().contains("languages") || requestContext.getUriInfo().getPath().contains("tasks"))
         				&& ( requestContext.getMethod().equals("DELETE") || requestContext.getMethod().equals("POST") || requestContext.getMethod().equals("PUT") ) ) {
         			
         			secFuncs.handleAuth(requestContext, creds[0], creds[1], Arrays.asList("manager", "admin"));
+        			return;
         		}
         		
         		if ( requestContext.getUriInfo().getPath().contains("users") ) {
         			secFuncs.handleAuth(requestContext, creds[0], creds[1], Arrays.asList("admin"));
+        			return;
         		}
             	
             }catch (InvalidJwtException ex) {
@@ -68,10 +74,11 @@ public class SecurityFilter implements ContainerRequestFilter {
 		}
 		
 		
-		if ( requestContext.getUriInfo().getPath().contains("authorization") ) {
+		if ( requestContext.getUriInfo().getPath().contains("authorize") ) {
 		
 			System.out.println("Checking credentials...");
 			secFuncs.login(requestContext);
+			return;
 		}
 		
 		// Let all GET requests not directed to users past the filter.
@@ -90,7 +97,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 			return;
 		}					
 		
-		
+		throw new ForbiddenException("Forbidden.");
 		
 	}
 	
