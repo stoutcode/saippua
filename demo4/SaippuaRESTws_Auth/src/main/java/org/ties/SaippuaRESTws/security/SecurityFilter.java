@@ -21,8 +21,12 @@ public class SecurityFilter implements ContainerRequestFilter {
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		
-		String authHeaderVal = requestContext.getHeaderString("Authorization");		
 		
+		String authHeaderVal = requestContext.getHeaderString("Authorization");	
+		
+		if (authHeaderVal  == null) {
+			authHeaderVal = "noAuth";
+		}
 		System.out.println("request filter invoked...");
 		
 		//Checks for jwt token
