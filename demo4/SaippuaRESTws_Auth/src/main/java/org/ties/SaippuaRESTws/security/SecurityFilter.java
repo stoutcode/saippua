@@ -32,6 +32,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 		//Checks for jwt token
 		if (authHeaderVal.startsWith("Bearer")) {
             try {
+            	
             	final String[] creds = validate(authHeaderVal.split(" ")[1]); //[0] = username & [1] = password
             	System.out.println("Authenticating with JWT..");
                 System.out.println("JWT being tested:\n" + authHeaderVal.split(" ")[1]);
@@ -67,7 +68,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 		}
 		
 		
-		if ( requestContext.getUriInfo().getPath().contains("authenticate") ) {
+		if ( requestContext.getUriInfo().getPath().contains("authorization") ) {
 		
 			System.out.println("Checking credentials...");
 			secFuncs.login(requestContext);
@@ -88,6 +89,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 			System.out.println("GET request bypassed security filter...");
 			return;
 		}					
+		
+		
 		
 	}
 	
