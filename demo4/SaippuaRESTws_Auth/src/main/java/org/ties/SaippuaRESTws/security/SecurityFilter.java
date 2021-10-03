@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import javax.ws.rs.container.*;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.jose4j.jwk.RsaJsonWebKey;
@@ -12,7 +11,8 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
-import org.ties.SaippuaRESTws.models.ErrorMessage;
+import org.ties.SaippuaRESTws.exceptions.AuthorizationException;
+import org.ties.SaippuaRESTws.exceptions.ForbiddenException;
 
 @Provider
 public class SecurityFilter implements ContainerRequestFilter {
@@ -54,15 +54,8 @@ public class SecurityFilter implements ContainerRequestFilter {
             }catch (InvalidJwtException ex) {
                 System.out.println("JWT validation failed");
 
-                requestContext.setProperty("auth-failed", true);                
-                ErrorMessage errorMessage = new ErrorMessage("User cannot access the resource.", 401,
-                		"http://myDocs.org");
-
-                Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED)
-                		.entity(errorMessage)
-                		.build();
-
-                requestContext.abortWith(unauthorizedStatus); 		
+                requestContext.setProperty("auth-failed", true);
+                throw new AuthorizationException();
             }
 		
 		}
@@ -77,21 +70,11 @@ public class SecurityFilter implements ContainerRequestFilter {
 		// Let all GET requests not directed to users past the filter.
 		if (requestContext.getMethod().equals("GET")) {
 			if ( requestContext.getUriInfo().getPath().contains("users") ) {
-				ErrorMessage errorMessage = new ErrorMessage("User cannot access the resource.", 401,
-                		"http://myDocs.org");
-
-                Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED)
-                		.entity(errorMessage)
-                		.build();
-
-                requestContext.abortWith(unauthorizedStatus); 	
+				throw new ForbiddenException();
 			}
 			System.out.println("GET request bypassed security filter...");
 			return;
 		}					
-		
-		
-		
 	}
 	
 	private String[] validate(String jwt) throws InvalidJwtException {

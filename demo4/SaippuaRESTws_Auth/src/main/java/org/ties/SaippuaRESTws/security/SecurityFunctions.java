@@ -1,17 +1,12 @@
 package org.ties.SaippuaRESTws.security;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Response;
-
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.ties.SaippuaRESTws.models.ErrorMessage;
+import org.ties.SaippuaRESTws.exceptions.AuthorizationException;
 import org.ties.SaippuaRESTws.models.User;
 import org.ties.SaippuaRESTws.services.UserService;
 
@@ -72,19 +67,8 @@ public class SecurityFunctions {
 
 	public void handleAuth(ContainerRequestContext requestContext, String username, String password, List<String> roles) {		
 
-		if (checkCredentialsToRoles(username, password, roles) ) {
-			return;
-		}
-
-		ErrorMessage errorMessage = new ErrorMessage("User cannot access the resource.", 401,
-		"http://myDocs.org");
-
-		Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED)
-		.entity(errorMessage)
-		.build();
-
-		requestContext.abortWith(unauthorizedStatus);
-		
+		if (!checkCredentialsToRoles(username, password, roles) )
+			throw new AuthorizationException();
 	}
 	
 	public void login(ContainerRequestContext requestContext) {
@@ -98,7 +82,7 @@ public class SecurityFunctions {
 		System.out.println("Username: " + username);
 		System.out.println("Password: " + password);
 		
-		Boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
+		boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
 		
 		if(test) {
 			//List<Object> jwt = new ArrayList<Object>();
@@ -108,17 +92,7 @@ public class SecurityFunctions {
 	        		//Response.ok().header("Authorization", "Bearer: " + jwt).build();
 		}
 		
-	
-		ErrorMessage errorMessage = new ErrorMessage("Invalid username or password.", 401,
-				"http://myDocs.org");
-
-		Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED)
-				.entity(errorMessage)
-				.build();
-
-		requestContext.abortWith(unauthorizedStatus);
-		
-		
+		throw new AuthorizationException();
 	}
  
 }
