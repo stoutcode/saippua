@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
@@ -35,7 +37,7 @@ public class SecurityFunctions {
 		return checkCredentialsToRoles(username, password, roles);
 	}
 	
-	private String[] decode(List<String> authHeader){
+	public static String[] decode(List<String> authHeader){
 		String authToken = authHeader.get(0);
 		
 		authToken = authToken.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
@@ -85,7 +87,7 @@ public class SecurityFunctions {
 		
 	}
 	
-	public Response login(ContainerRequestContext requestContext) {
+	public void login(ContainerRequestContext requestContext) {
 		
 		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
 		String[] credentials = decode(authHeader);
@@ -99,10 +101,11 @@ public class SecurityFunctions {
 		Boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
 		
 		if(test) {
-			List<Object> jwt = new ArrayList<Object>();
-	        jwt.add(TokenUtility.buildJWT(username, password));
-	        System.out.println("login succesful, sending jwt back: \n" + jwt);
-	        return Response.ok().header("Authorization", "Bearer: " + jwt).build();
+			//List<Object> jwt = new ArrayList<Object>();
+	        //jwt.add(TokenUtility.buildJWT(username, password));
+	        //System.out.println("login succesful, sending jwt back: \n" + jwt);
+	        return ;
+	        		//Response.ok().header("Authorization", "Bearer: " + jwt).build();
 		}
 		
 	
@@ -113,7 +116,7 @@ public class SecurityFunctions {
 				.entity(errorMessage)
 				.build();
 
-		return unauthorizedStatus;
+		requestContext.abortWith(unauthorizedStatus);
 		
 		
 	}

@@ -1,37 +1,39 @@
 package org.ties.SaippuaRESTws.resources;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.net.URI;
+import java.util.StringTokenizer;
 
-
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
-import org.ties.SaippuaRESTws.exceptions.*;
-import org.ties.SaippuaRESTws.models.Language;
-import org.ties.SaippuaRESTws.models.Snippet;
-import org.ties.SaippuaRESTws.services.LangService;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.ties.SaippuaRESTws.models.ErrorMessage;
+import org.ties.SaippuaRESTws.security.TokenUtility;
+import org.ties.SaippuaRESTws.security.SecurityFunctions;
 
 @Path("authorization")
 public class AuthResource {
+	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
+	private static final String AUTHORIZATION_HEADER_PREFIX = "Basic ";
 	
 	@GET
-    public Response Null() {
+    public Response login(ContainerRequestContext requestContext) {
 		
-		return Response.ok().build();
+		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
+		String[] credentials = SecurityFunctions.decode(authHeader);
+		String username = credentials[0];
+		String password = credentials[1];
+	
+		List<Object> jwt = new ArrayList<Object>();
+        jwt.add(TokenUtility.buildJWT(username, password));
+        System.out.println("login succesful, sending jwt back: \n" + jwt);
+        return Response.ok().header("Authorization", "Bearer: " + jwt).build();
     }
 	
+
 }
