@@ -1,12 +1,9 @@
 package org.ties.SaippuaRESTws.security;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 
@@ -30,10 +27,6 @@ public class SecurityFunctions {
 		String username = credentials[0];
 		String password = credentials[1];
 		
-		// Prints that can be removed after task is done
-		System.out.println(username);
-		System.out.println(password);
-		
 		return checkCredentialsToRoles(username, password, roles);
 	}
 	
@@ -43,9 +36,7 @@ public class SecurityFunctions {
 		authToken = authToken.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
 		
 		String decodedString = new String(Base64.decodeBase64(authToken));
-	
-		StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");
-		
+		StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");	
 		String[] ret = new String[2];
 		
 		ret[0] = tokenizer.nextToken();
@@ -73,6 +64,7 @@ public class SecurityFunctions {
 	public void handleAuth(ContainerRequestContext requestContext, String username, String password, List<String> roles) {		
 
 		if (checkCredentialsToRoles(username, password, roles) ) {
+			System.out.println("Authentication succesful");
 			return;
 		}
 
@@ -84,7 +76,6 @@ public class SecurityFunctions {
 		.build();
 
 		requestContext.abortWith(unauthorizedStatus);
-		
 	}
 	
 	public void login(ContainerRequestContext requestContext) {
@@ -101,13 +92,8 @@ public class SecurityFunctions {
 		Boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
 		
 		if(test) {
-			//List<Object> jwt = new ArrayList<Object>();
-	        //jwt.add(TokenUtility.buildJWT(username, password));
-	        //System.out.println("login succesful, sending jwt back: \n" + jwt);
 	        return ;
-	        		//Response.ok().header("Authorization", "Bearer: " + jwt).build();
 		}
-		
 	
 		ErrorMessage errorMessage = new ErrorMessage("Invalid username or password.", 401,
 				"http://myDocs.org");
@@ -116,9 +102,8 @@ public class SecurityFunctions {
 				.entity(errorMessage)
 				.build();
 
-		requestContext.abortWith(unauthorizedStatus);
-		
-		
+		requestContext.abortWith(unauthorizedStatus);		
 	}
- 
 }
+
+

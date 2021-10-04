@@ -12,7 +12,6 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
-import org.ties.SaippuaRESTws.exceptions.CreateException;
 import org.ties.SaippuaRESTws.exceptions.ForbiddenException;
 import org.ties.SaippuaRESTws.models.ErrorMessage;
 
@@ -29,16 +28,16 @@ public class SecurityFilter implements ContainerRequestFilter {
 		if (authHeaderVal  == null) {
 			authHeaderVal = "noAuth";
 		}
+		System.out.println("...");
+		System.out.println("request filter invoked");
 		System.out.println(authHeaderVal);
-		System.out.println("request filter invoked...");
 		
 		//Checks for jwt token
 		if (authHeaderVal.startsWith("Bearer")) {
             try {
             	
             	final String[] creds = validate(authHeaderVal.split(" ")[1]); //[0] = username & [1] = password
-            	System.out.println("Authenticating with JWT..");
-                
+            	System.out.println("Authenticating with JWT..");         
                 
             	if ( requestContext.getUriInfo().getPath().contains("snippets") ) {
         			secFuncs.handleAuth(requestContext, creds[0], creds[1], Arrays.asList("worker", "manager", "admin"));

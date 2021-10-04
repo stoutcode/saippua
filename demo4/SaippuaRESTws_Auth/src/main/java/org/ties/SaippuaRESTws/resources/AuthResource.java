@@ -15,7 +15,6 @@ import org.ties.SaippuaRESTws.security.TokenUtility;
 @Path("authorize")
 public class AuthResource {
 	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
-	private static final String AUTHORIZATION_HEADER_PREFIX = "Basic ";
 	
 	@GET
     public Response login(ContainerRequestContext requestContext) {
