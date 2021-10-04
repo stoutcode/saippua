@@ -1,5 +1,6 @@
 package org.ties.SaippuaRESTws.security;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -22,23 +23,26 @@ public class SecurityFunctions {
 			return false;
 		}
 		
+		String[] credentials = decode(authHeader);
+		String username = credentials[0];
+		String password = credentials[1];
+		
+		return checkCredentialsToRoles(username, password, roles);
+	}
+	
+	public static String[] decode(List<String> authHeader){
 		String authToken = authHeader.get(0);
 		
 		authToken = authToken.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
 		
 		String decodedString = new String(Base64.decodeBase64(authToken));
-	
-		StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");
+		StringTokenizer tokenizer = new StringTokenizer(decodedString, ":");	
+		String[] ret = new String[2];
 		
-		String username = tokenizer.nextToken();
-		String password = tokenizer.nextToken();
+		ret[0] = tokenizer.nextToken();
+		ret[1] = tokenizer.nextToken();
 		
-		// Prints that can be removed after task is done
-		System.out.println(username);
-		System.out.println(password);
-		
-		return checkCredentialsToRoles(username, password, roles);
-
+		return ret;
 	}
 
 	private boolean checkCredentialsToRoles(String username, String password, List<String> roles) {
@@ -57,10 +61,10 @@ public class SecurityFunctions {
 		return false;
 	}
 
-	public void handleAuth(ContainerRequestContext requestContext, List<String> roles) {		
-		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
+	public void handleAuth(ContainerRequestContext requestContext, String username, String password, List<String> roles) {		
 
-		if (checkAuthentication(authHeader, roles) ) {
+		if (checkCredentialsToRoles(username, password, roles) ) {
+			System.out.println("Authentication succesful");
 			return;
 		}
 
@@ -72,7 +76,34 @@ public class SecurityFunctions {
 		.build();
 
 		requestContext.abortWith(unauthorizedStatus);
-		
 	}
- 
+	
+	public void login(ContainerRequestContext requestContext) {
+		
+		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
+		String[] credentials = decode(authHeader);
+		String username = credentials[0];
+		String password = credentials[1];
+		
+		System.out.println("Login attempted with following credentials:");
+		System.out.println("Username: " + username);
+		System.out.println("Password: " + password);
+		
+		Boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
+		
+		if(test) {
+	        return ;
+		}
+	
+		ErrorMessage errorMessage = new ErrorMessage("Invalid username or password.", 401,
+				"http://myDocs.org");
+
+		Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED)
+				.entity(errorMessage)
+				.build();
+
+		requestContext.abortWith(unauthorizedStatus);		
+	}
 }
+
+
