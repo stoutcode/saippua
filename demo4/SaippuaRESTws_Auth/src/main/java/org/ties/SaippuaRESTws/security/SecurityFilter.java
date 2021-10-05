@@ -39,7 +39,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             	final String[] creds = validate(authHeaderVal.split(" ")[1]); //[0] = username & [1] = password
             	System.out.println("Authenticating with JWT..");         
                 
-            	if ( requestContext.getUriInfo().getPath().contains("snippets") ) {
+            	if ( requestContext.getUriInfo().getPath().contains("snippet") ) {
         			secFuncs.handleAuth(requestContext, creds[0], creds[1], Arrays.asList("worker", "manager", "admin"));
         			return;
         		}
