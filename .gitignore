@@ -3,3 +3,14 @@ target/*
 demo3/MyRESTws_saippua/.settings/*
 demo3/SaippuaRESTws/target/*
 demo3/SaippuaRESTws/.settings/*
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
