@@ -8,29 +8,33 @@ resource "aws_s3_bucket" "this" {
 }
 
 resource "aws_s3_bucket_object" "this" {
-  count = length(var.war_app_specs)
-
   bucket = aws_s3_bucket.this.id
-  key    = var.war_app_specs[count.index].name
-  source = "${var.solutions_dir}/${var.war_app_specs[count.index].filename}"
+  key    = var.war_app_specs.filename
+  source = "${var.solutions_dir}/${var.war_app_specs.filename}"
+}
+
+resource "aws_elastic_beanstalk_application" "this" {
+  name = var.war_app_specs.name
 }
 
 resource "aws_elastic_beanstalk_application_version" "this" {
-  count = length(var.war_app_specs)
-
-  application = var.war_app_specs[count.index].id
+  application = aws_elastic_beanstalk_application.this.name
   name        = "1.0"
   bucket      = aws_s3_bucket.this.id
-  key         = var.war_app_specs[count.index].name
+  key         = aws_s3_bucket_object.this.id
 }
 
 resource "aws_elastic_beanstalk_environment" "this" {
-  count = length(var.war_app_specs)
+  name                = var.war_app_specs.env_name
+  application         = aws_elastic_beanstalk_application.this.name
+  solution_stack_name = "64bit Amazon Linux 2018.03 v3.4.11 running Tomcat 8.5 Java 8"
+  version_label       = aws_elastic_beanstalk_application_version.this.name
 
-  name                = var.war_app_specs[count.index].name
-  application         = var.war_app_specs[count.index].id
-  solution_stack_name = "64bit Amazon Linux 2017.03 v2.6.2 running Tomcat 8 Java 8"
-  version_label       = aws_elastic_beanstalk_application_version.this[count.index].name
+  setting {
+      namespace = "aws:autoscaling:launchconfiguration"
+      name = "IamInstanceProfile"
+      value = "aws-elasticbeanstalk-ec2-role"
+  }
 
   setting {
     namespace = "aws:autoscaling:asg"

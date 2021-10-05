@@ -16,22 +16,10 @@ variable "solutions_dir" {
 
 variable "war_app_specs" {
   description = "WAR application specs on AWS."
-  type        = list(map(string))
-  default = [
-    {
-      name     = "JettyApplication",
-      id       = "myJettyApp",
-      filename = "jetty.war"
-    },
-    {
-      name     = "SoapApi",
-      id       = "mySoapApi",
-      filename = "soap.war"
-    },
-    {
-      name     = "RestApi",
-      id       = "myRestApi",
-      filename = "rest.war"
-    }
-  ]
+  type        = map(string)
+  default = {
+    name     = "myApplication",
+    env_name = "myEnvironment",
+    filename = "wars.zip"
+  }
 }
