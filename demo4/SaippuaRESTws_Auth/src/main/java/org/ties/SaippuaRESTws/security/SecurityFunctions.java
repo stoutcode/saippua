@@ -85,10 +85,6 @@ public class SecurityFunctions {
 		String username = credentials[0];
 		String password = credentials[1];
 		
-		System.out.println("Login attempted with following credentials:");
-		System.out.println("Username: " + username);
-		System.out.println("Password: " + password);
-		
 		Boolean test = checkCredentialsToRoles(username, password, Arrays.asList("worker", "manager", "admin"));
 		
 		if(test) {
