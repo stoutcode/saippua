@@ -109,8 +109,7 @@ public class LanguageResource {
 		if (language == null) {
 			throw new CreateException("Could not add snippet. Something went wrong");
 		}
-		
-		addLanguageLinks(uriInfo, language);
+
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.created(uri).entity(language).build();
 		
@@ -125,8 +124,7 @@ public class LanguageResource {
 		if (language == null) {
 			throw new UpdateException("Could not update snippet. Something went wrong");
 		}
-			
-		addLanguageLinks(uriInfo, language);
+
 		URI uri = uriInfo.getAbsolutePathBuilder().build();
 		return Response.created(uri).entity(language).build();
     }
