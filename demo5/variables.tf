@@ -20,6 +20,6 @@ variable "war_app_specs" {
   default = {
     name     = "myApplication",
     env_name = "myEnvironment",
-    filename = "wars.zip"
+    filename = "rest.war"
   }
 }

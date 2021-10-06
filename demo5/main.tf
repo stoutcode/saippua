@@ -27,8 +27,9 @@ resource "aws_elastic_beanstalk_application_version" "this" {
 resource "aws_elastic_beanstalk_environment" "this" {
   name                = var.war_app_specs.env_name
   application         = aws_elastic_beanstalk_application.this.name
-  solution_stack_name = "64bit Amazon Linux 2018.03 v3.4.11 running Tomcat 8.5 Java 8"
   version_label       = aws_elastic_beanstalk_application_version.this.name
+  solution_stack_name = "64bit Amazon Linux 2018.03 v3.4.11 running Tomcat 8.5 Java 8"
+  cname_prefix        = "ties4560"
 
   setting {
       namespace = "aws:autoscaling:launchconfiguration"
