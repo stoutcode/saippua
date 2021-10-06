@@ -32,9 +32,9 @@ resource "aws_elastic_beanstalk_environment" "this" {
   cname_prefix        = "ties4560"
 
   setting {
-      namespace = "aws:autoscaling:launchconfiguration"
-      name = "IamInstanceProfile"
-      value = "aws-elasticbeanstalk-ec2-role"
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = "aws-elasticbeanstalk-ec2-role"
   }
 
   setting {
@@ -42,5 +42,4 @@ resource "aws_elastic_beanstalk_environment" "this" {
     name      = "MinSize"
     value     = "1"
   }
-  # bunch of other beanstalk settings
 }
