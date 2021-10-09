@@ -51,10 +51,4 @@ resource "aws_elastic_beanstalk_environment" "this" {
     name      = "MinSize"
     value     = "1"
   }
-
-  #setting {
-  #  namespace = "aws:elasticbeanstalk:application:environment"
-  #  name      = "SERVER_PORT"
-  #  value     = "8080"
-  #}
 }
