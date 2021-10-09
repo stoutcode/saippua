@@ -28,19 +28,6 @@ variable "war_app_specs" {
   ]
 }
 
-variable "extra_setting" {
-  default = [
-    [
-      null,
-      {
-        namespace = "aws:elasticbeanstalk:application:environment"
-        name      = "SERVER_PORT"
-        value     = "8080"
-      }
-    ]
-  ]
-}
-
 variable "version_number" {
   description = "Specify a new version number to update EB envs"
   type        = string
